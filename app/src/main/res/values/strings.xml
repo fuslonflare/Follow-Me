@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">FollowMe</string>
+    <string name="facebook_app_id">385406521858416</string>
+
+    <string name="label_button_leader">Leader Mode</string>
+    <string name="label_button_follower">Follower Mode</string>
+    <string name="label_button_next">Next</string>
+    <string name="label_button_cancel">Cancel</string>
+
+    <string name="text_wait_leader">Please wait for your leader to add you to group</string>
+    <string name="text_stage_add_member">Add Member</string>
+
+    <string name="hint_enter_member_id">Enter member ID</string>
+
+    <string name="content_desc_qr_code">Scan with QR Code</string>
+    <string name="content_desc_add_member">Add member button</string>
+</resources>

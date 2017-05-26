@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatButton
+        android:enabled="false"
+        android:id="@+id/button_leader"
+        style="@style/DefaultButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_button_leader"
+        android:drawableStart="@drawable/ic_supervisor_account"
+        android:text="@string/label_button_leader" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:enabled="false"
+        android:id="@+id/button_follower"
+        style="@style/DefaultButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_button_follower"
+        android:drawableStart="@drawable/ic_face"
+        android:text="@string/label_button_follower" />
+</LinearLayout>
