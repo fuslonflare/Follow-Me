@@ -1,5 +1,6 @@
 package com.example.phuwarin.followme.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
+import com.example.phuwarin.followme.activity.StandbyActivity;
 import com.example.phuwarin.followme.view.AddMemberField;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -21,9 +23,7 @@ import com.facebook.HttpMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -179,7 +179,10 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                                     Log.i(TAG, memberJoinTrip.toString());
 
                                     if (countComplete == parent.getChildCount()) {
-                                        Log.d(TAG, "Go to StanbyActivity");
+                                        Log.d(TAG, "Go to StandbyActivity");
+                                        getActivity().finish();
+                                        Intent intent = new Intent(getActivity(), StandbyActivity.class);
+                                        getActivity().startActivity(intent);
                                     }
                                 } else {
                                     countComplete = 0;

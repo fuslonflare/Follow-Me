@@ -5,11 +5,12 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.phuwarin.followme"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -25,15 +26,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':TheCheeseLibrary')
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.facebook.android:facebook-android-sdk:4.21.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.23.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
-    compile 'com.tarun0.zxing-standalone:zxing-standalone:1.0.0'
     compile 'com.github.kenglxn.QRGen:android:2.2.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.google.android.gms:play-services-maps:10.2.6'
     testCompile 'junit:junit:4.12'
 }
