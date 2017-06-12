@@ -2,23 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/windowBackground"
+    android:background="@color/color_bg_window"
     android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="@dimen/stage_label_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/stage_label_margin_top"
+        android:background="@drawable/bg_stage_label"
+        android:drawableLeft="@drawable/ic_group_add"
+        android:drawablePadding="@dimen/stage_label_drawable_padding"
+        android:drawableStart="@drawable/ic_group_add"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/stage_label_padding_y"
+        android:paddingLeft="@dimen/stage_label_padding_x"
+        android:paddingRight="@dimen/stage_label_padding_x"
+        android:paddingTop="@dimen/stage_label_padding_y"
+        android:text="@string/text_stage_add_member"
+        android:textColor="@color/color_text_stage" />
 
     <LinearLayout
         android:id="@+id/parent_add_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
+
         <com.example.phuwarin.followme.view.AddMemberField
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <com.example.phuwarin.followme.view.AddMemberField
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <com.example.phuwarin.followme.view.AddMemberField
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,7 +56,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@color/colorBgButtonCancel"
+            android:background="@color/color_bg_button_cancel"
             android:text="@string/label_button_cancel"
             android:textColor="@android:color/white" />
 
@@ -47,7 +67,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@color/colorBgButtonNext"
+            android:background="@color/color_bg_button_next"
             android:text="@string/label_button_next" />
     </LinearLayout>
 

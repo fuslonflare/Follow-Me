@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg_window"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="@dimen/stage_label_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/stage_label_margin_top"
+            android:background="@drawable/bg_stage_label"
+            android:drawableLeft="@drawable/ic_place"
+            android:drawablePadding="@dimen/stage_label_drawable_padding"
+            android:drawableStart="@drawable/ic_place"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/stage_label_padding_y"
+            android:paddingLeft="@dimen/stage_label_padding_x"
+            android:paddingRight="@dimen/stage_label_padding_x"
+            android:paddingTop="@dimen/stage_label_padding_y"
+            android:text="@string/text_stage_destination"
+            android:textColor="@color/color_text_stage" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/button_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@color/color_bg_button_next"
+            android:text="@string/label_button_next" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/place_autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

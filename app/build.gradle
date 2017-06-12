@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.example.phuwarin.followme"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,21 +20,45 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
+ext.supportLibraryVersion = '25.3.1'
+ext.supportConstraintVersion = '1.0.2'
+ext.facebookSdkVersion = '4.23.0'
+ext.googlePlayServiceVersion = '11.0.0'
+ext.retrofitVersion = '2.3.0'
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':TheCheeseLibrary')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.facebook.android:facebook-android-sdk:4.23.0'
+
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support.constraint:constraint-layout:$supportConstraintVersion"
+
+    compile "com.google.android.gms:play-services-maps:$googlePlayServiceVersion"
+    compile "com.google.android.gms:play-services-location:$googlePlayServiceVersion"
+    compile "com.google.android.gms:play-services-places:$googlePlayServiceVersion"
+
+    compile "com.facebook.android:facebook-android-sdk:$facebookSdkVersion"
+
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
+
     compile 'com.github.kenglxn.QRGen:android:2.2.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.google.android.gms:play-services-maps:10.2.6'
+
+    compile 'com.akexorcist:googledirectionlibrary:1.0.5'
+    compile 'com.google.maps.android:android-maps-utils:0.4'
+
     testCompile 'junit:junit:4.12'
 }

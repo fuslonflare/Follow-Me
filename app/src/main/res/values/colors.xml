@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="windowBackground">#212121</color>
+    <color name="color_primary">#3F51B5</color>
+    <color name="color_primary_dark">#303F9F</color>
+    <color name="color_accent">#FF4081</color>
+    <color name="color_bg_window">#212121</color>
 
-    <color name="colorBackgroundDisable">#303030</color>
-    <color name="colorBgButtonLeader">#2196F3</color>
-    <color name="colorBgButtonFollower">#8BC34A</color>
-    <color name="colorBgButtonNext">#76FF03</color>
-    <color name="colorBgButtonCancel">#D50000</color>
+    <color name="color_bg_button_disable">#303030</color>
+    <color name="color_bg_button_leader">#2196F3</color>
+    <color name="color_bg_button_follower">#8BC34A</color>
+    <color name="color_bg_button_next">#76FF03</color>
+    <color name="color_bg_button_cancel">#D50000</color>
 
-    <color name="colorBgStage">#03A9F4</color>
+    <color name="color_bg_stage">#03A9F4</color>
+    <color name="color_text_stage">@android:color/black</color>
 
-    <color name="textColorWhite50">#7fffffff</color>
+    <color name="color_text_white_50">#7fffffff</color>
 </resources>
