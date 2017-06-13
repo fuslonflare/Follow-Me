@@ -1,7 +1,10 @@
 package com.example.phuwarin.followme.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
@@ -16,12 +19,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PickDestinationActivity extends FragmentActivity implements
-        OnMapReadyCallback {
+public class PickDestinationActivity extends FragmentActivity
+        implements OnMapReadyCallback, View.OnClickListener {
 
     private static GoogleMap mMap;
     private static Marker aMarker;
     private static LatLng currentDestination;
+
+    private static AppCompatButton buttonNext;
     /***
      * Listener Zone
      * ****/
@@ -34,6 +39,7 @@ public class PickDestinationActivity extends FragmentActivity implements
 
             aMarker = mMap.addMarker(new MarkerOptions().position(latLng));
             currentDestination = latLng;
+            buttonNext.setVisibility(View.VISIBLE);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
     };
@@ -50,11 +56,8 @@ public class PickDestinationActivity extends FragmentActivity implements
 
         aMarker = mMap.addMarker(marker);
         currentDestination = destination;
+        buttonNext.setVisibility(View.VISIBLE);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destination, 16));
-    }
-
-    public static LatLng getDestination() {
-        return currentDestination;
     }
 
     @Override
@@ -62,6 +65,7 @@ public class PickDestinationActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_destination);
 
+        initUi();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.member_area,
@@ -81,6 +85,11 @@ public class PickDestinationActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
     }
 
+    private void initUi() {
+        buttonNext = (AppCompatButton) findViewById(R.id.button_next);
+        buttonNext.setOnClickListener(this);
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -92,11 +101,30 @@ public class PickDestinationActivity extends FragmentActivity implements
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        showToast("Map Ready");
+
         mMap = googleMap;
         mMap.setOnMapClickListener(onMapClickListener);
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == buttonNext) {
+            Intent intent = new Intent(PickDestinationActivity.this, MapsActivity.class);
+            if (currentDestination != null) {
+                double lat = currentDestination.latitude;
+                double lng = currentDestination.longitude;
+                intent.putExtra("des_lat", lat);
+                intent.putExtra("des_lng", lng);
+                showToast(lat + ", " + lng);
+                startActivity(intent);
+            } else {
+                showToast("Don't forget to choose destination");
+            }
+        }
     }
 }

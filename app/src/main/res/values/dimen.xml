@@ -6,7 +6,7 @@
     <dimen name="radius_round_rect_small">8dp</dimen>
 
     <dimen name="stage_label_width">200dp</dimen>
-    <dimen name="stage_label_margin_top">20dp</dimen>
+    <dimen name="stage_label_margin_top">15dp</dimen>
     <dimen name="stage_label_drawable_padding">10dp</dimen>
     <dimen name="stage_label_padding_x">10dp</dimen>
     <dimen name="stage_label_padding_y">5dp</dimen>

@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.example.phuwarin.followme"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 16
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,7 +26,7 @@ repositories {
     }
 }
 
-ext.supportLibraryVersion = '25.3.1'
+ext.supportLibraryVersion = '25.4.0'
 ext.supportConstraintVersion = '1.0.2'
 ext.facebookSdkVersion = '4.23.0'
 ext.googlePlayServiceVersion = '11.0.0'

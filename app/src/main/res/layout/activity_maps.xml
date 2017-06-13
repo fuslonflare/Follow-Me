@@ -9,10 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="@dimen/stage_label_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/stage_label_margin_top"
+        android:background="@drawable/bg_stage_label"
+        android:drawableLeft="@drawable/ic_directions_bike"
+        android:drawablePadding="@dimen/stage_label_drawable_padding"
+        android:drawableStart="@drawable/ic_directions_bike"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/stage_label_padding_y"
+        android:paddingLeft="@dimen/stage_label_padding_x"
+        android:paddingRight="@dimen/stage_label_padding_x"
+        android:paddingTop="@dimen/stage_label_padding_y"
+        android:text="@string/text_stage_route"
+        android:textColor="@color/color_text_stage" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="5">
 
         <fragment xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
@@ -28,5 +44,11 @@
             android:layout_alignParentBottom="true"
             android:text="Request Direction" />
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/pick_route_area"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

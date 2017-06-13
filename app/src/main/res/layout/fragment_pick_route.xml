@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rg_route"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_bg_window"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RadioButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:checked="true"
+        android:text="เส้นทางที่ 1"
+        android:textColor="@color/white" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="@dimen/stage_label_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/stage_label_margin_top"
-            android:background="@drawable/bg_stage_label"
-            android:drawableLeft="@drawable/ic_directions_bike"
-            android:drawablePadding="@dimen/stage_label_drawable_padding"
-            android:drawableStart="@drawable/ic_directions_bike"
-            android:gravity="center_vertical"
-            android:paddingBottom="@dimen/stage_label_padding_y"
-            android:paddingLeft="@dimen/stage_label_padding_x"
-            android:paddingRight="@dimen/stage_label_padding_x"
-            android:paddingTop="@dimen/stage_label_padding_y"
-            android:text="@string/text_stage_route"
-            android:textColor="@color/color_text_stage" />
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="เส้นทางที่ 2"
+        android:textColor="@color/white" />
 
-    </LinearLayout>
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="เส้นทางที่ 3"
+        android:textColor="@color/white" />
 
-</LinearLayout>
+</RadioGroup>

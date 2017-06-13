@@ -25,6 +25,8 @@ import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.fragment.MemberAreaFragment;
+import com.example.phuwarin.followme.fragment.PickRouteFragment;
+import com.example.phuwarin.followme.manager.ContextBuilder;
 import com.example.phuwarin.followme.util.Colour;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,10 +44,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapReadyCallback, View.OnClickListener,
@@ -53,19 +56,34 @@ public class MapsActivity extends FragmentActivity
         LocationListener, DirectionCallback {
 
     private static final String TAG = "DirectionTAG";
-
+    private static GoogleMap mMap;
+    private static ArrayList<LatLng> directionPositionList;
+    private static List<Route> route;
+    private static Polyline polyline;
+    //private static final double DISTANCE_THRESHOLD = 50.0;
+    private static int sizeOfRoute;
     private String API_KEY;
-    private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private Marker mMarker;
-
     private AppCompatButton btnRequestDirection;
-
     private LatLng origin;
     private LatLng destination;
-    private LatLng camera;
 
-    //private static final double DISTANCE_THRESHOLD = 50.0;
+    public static int getSizeOfRoute() {
+        return sizeOfRoute;
+    }
+
+    public static void showRoute(int which) {
+        if (route != null && !route.isEmpty()) {
+            if (polyline != null) {
+                polyline.remove();
+            }
+            polyline = mMap.addPolyline(DirectionConverter.createPolyline(
+                    ContextBuilder.getInstance().getContext(),
+                    route.get(which).getLegList().get(0).getDirectionPoint(),
+                    5, Color.parseColor(Colour.RED.getCode())));
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +123,6 @@ public class MapsActivity extends FragmentActivity
                 getIntent().getDoubleExtra("des_lng", 0.0));
     }
 
-
     protected void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -133,7 +150,6 @@ public class MapsActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -203,7 +219,7 @@ public class MapsActivity extends FragmentActivity
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
         origin = currentLocation;
         if (btnRequestDirection.getVisibility() == View.VISIBLE) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
         }
 
         if (mMarker != null) {
@@ -247,7 +263,6 @@ public class MapsActivity extends FragmentActivity
         );
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -283,20 +298,20 @@ public class MapsActivity extends FragmentActivity
     public void onDirectionSuccess(Direction direction, String rawBody) {
         showSnackBar(direction.getStatus());
         if (direction.isOK()) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.pick_route_area, PickRouteFragment.newInstance(), "PickRouteFragment")
+                    .commit();
+
             mMap.addMarker(new MarkerOptions().position(origin));
             mMap.addMarker(new MarkerOptions().position(destination));
 
-            camera = getLatLngCamera(origin, destination);
-            Colour[] colors = Colour.values();
-            Random generate = new Random();
+            sizeOfRoute = direction.getRouteList().size();
+            route = direction.getRouteList();
 
-            for (int i = 0; i < direction.getRouteList().size(); i++) {
-                Route route = direction.getRouteList().get(i);
-                String color = colors[(i + (generate.nextInt() + 1024)) % colors.length].getCode();
-                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
-                mMap.addPolyline(DirectionConverter.createPolyline(this,
-                        directionPositionList, 5, Color.parseColor(color)));
-            }
+            polyline = mMap.addPolyline(DirectionConverter.createPolyline(
+                    ContextBuilder.getInstance().getContext(),
+                    route.get(0).getLegList().get(0).getDirectionPoint(),
+                    5, Color.parseColor(Colour.RED.getCode())));
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(origin);
