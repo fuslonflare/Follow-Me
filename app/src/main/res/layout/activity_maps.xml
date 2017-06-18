@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg_window"
     android:orientation="vertical">
 
     <FrameLayout
@@ -9,46 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="@dimen/stage_label_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/stage_label_margin_top"
-        android:background="@drawable/bg_stage_label"
-        android:drawableLeft="@drawable/ic_directions_bike"
-        android:drawablePadding="@dimen/stage_label_drawable_padding"
-        android:drawableStart="@drawable/ic_directions_bike"
-        android:gravity="center_vertical"
-        android:paddingBottom="@dimen/stage_label_padding_y"
-        android:paddingLeft="@dimen/stage_label_padding_x"
-        android:paddingRight="@dimen/stage_label_padding_x"
-        android:paddingTop="@dimen/stage_label_padding_y"
-        android:text="@string/text_stage_route"
-        android:textColor="@color/color_text_stage" />
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_height="match_parent">
 
         <fragment xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
+            android:id="@+id/map_master"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="com.example.phuwarin.followme.activity.MapsActivity" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_request_direction"
+            android:id="@+id/button_finish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Request Direction" />
+            android:layout_margin="10dp"
+            android:background="@color/green"
+            android:text="Finish" />
     </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/pick_route_area"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
 </LinearLayout>

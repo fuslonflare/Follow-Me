@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FollowMe</string>
     <string name="facebook_app_id">385406521858416</string>
+    <string name="fb_login_protocol_scheme">fb385406521858416</string>
     <string name="google_place_key">AIzaSyAmsFgR4TjydhlRTP05t0_Dre3ZA29BIqY</string>
 
     <string name="label_button_leader">Leader Mode</string>

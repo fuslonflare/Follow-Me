@@ -1,7 +1,7 @@
 package com.example.phuwarin.followme.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.fragment.MemberAreaFragment;

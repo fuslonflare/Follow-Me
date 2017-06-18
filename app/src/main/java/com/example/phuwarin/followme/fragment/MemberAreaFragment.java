@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.manager.SharedPreferenceHandler;
+import com.example.phuwarin.followme.util.detail.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -37,6 +38,27 @@ public class MemberAreaFragment extends Fragment {
 
     private LinearLayout loginArea;
     private LinearLayout memberArea;
+    /**
+     * Callback Zone
+     **/
+    FacebookCallback<LoginResult> facebookLoginCallback = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            showToast("Login onSuccess");
+            unlockMemberArea();
+            MainFragment.turnOnButton();
+        }
+
+        @Override
+        public void onCancel() {
+            showToast("Login onCancel");
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            showToast("Login onError: " + error.getMessage());
+        }
+    };
     private AppCompatTextView userName;
     private AppCompatTextView userId;
     private ImageView userPhoto;
@@ -94,22 +116,21 @@ public class MemberAreaFragment extends Fragment {
 
     private void initInstances(View rootView) {
         // Init 'View' instance(s) with rootView.findViewById here
-        LoginButton loginButton = (LoginButton) rootView.findViewById(R.id.facebook_login_button);
+        LoginButton loginButton = rootView.findViewById(R.id.facebook_login_button);
         loginButton.setReadPermissions("email");
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, facebookLoginCallback);
 
-        loginArea = (LinearLayout) rootView.findViewById(R.id.login_area);
-        memberArea = (LinearLayout) rootView.findViewById(R.id.profile_area);
-        userName = (AppCompatTextView) rootView.findViewById(R.id.user_name);
-        userId = (AppCompatTextView) rootView.findViewById(R.id.user_id);
-        userPhoto = (ImageView) rootView.findViewById(R.id.user_photo);
+        loginArea = rootView.findViewById(R.id.login_area);
+        memberArea = rootView.findViewById(R.id.profile_area);
+        userName = rootView.findViewById(R.id.user_name);
+        userId = rootView.findViewById(R.id.user_id);
+        userPhoto = rootView.findViewById(R.id.user_photo);
     }
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void onStart() {
@@ -159,32 +180,13 @@ public class MemberAreaFragment extends Fragment {
                 .load(photo)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(userPhoto);
+
+        User.getInstance().setId(id);
+        User.getInstance().setName(name);
     }
 
     private void unlockMemberArea() {
         loginArea.setVisibility(View.GONE);
         memberArea.setVisibility(View.VISIBLE);
     }
-
-    /**
-     * Callback Zone
-     **/
-    FacebookCallback<LoginResult> facebookLoginCallback = new FacebookCallback<LoginResult>() {
-        @Override
-        public void onSuccess(LoginResult loginResult) {
-            showToast("Login onSuccess");
-            unlockMemberArea();
-            MainFragment.turnOnButton();
-        }
-
-        @Override
-        public void onCancel() {
-            showToast("Login onCancel");
-        }
-
-        @Override
-        public void onError(FacebookException error) {
-            showToast("Login onError: " + error.getMessage());
-        }
-    };
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="red">#F44336</color>
+    <color name="deep_red">#D50000</color>
     <color name="pink">#E91E63</color>
     <color name="purple">#9C27B0</color>
     <color name="deep_purple">#673AB7</color>
@@ -22,20 +23,20 @@
     <color name="black">@android:color/black</color>
     <color name="white">@android:color/white</color>
 
-
     <color name="color_primary">@color/indigo</color> <!--Material 500-->
-    <color name="color_primary_dark">#303F9F</color>
+    <color name="color_primary_dark">#303F9F</color> <!--Material 700-->
     <color name="color_accent">#FF4081</color>
     <color name="color_bg_window">#212121</color>
 
     <color name="color_bg_button_disable">#303030</color>
-    <color name="color_bg_button_leader">#2196F3</color>
+    <color name="color_bg_button_leader">@color/blue</color>
     <color name="color_bg_button_follower">#8BC34A</color>
     <color name="color_bg_button_next">#76FF03</color>
     <color name="color_bg_button_next_sparse">#7776FF03</color>
-    <color name="color_bg_button_cancel">#D50000</color>
+    <color name="color_bg_button_cancel">@color/deep_red</color>
+    <color name="color_bg_button_start">@color/deep_red</color>
 
-    <color name="color_bg_stage">#03A9F4</color>
+    <color name="color_bg_stage">@color/light_blue</color>
     <color name="color_text_stage">@android:color/black</color>
 
     <color name="color_text_white_50">#7fffffff</color>

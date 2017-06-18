@@ -81,12 +81,12 @@ public class PickDestinationActivity extends FragmentActivity
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map2);
+                .findFragmentById(R.id.map_destination);
         mapFragment.getMapAsync(this);
     }
 
     private void initUi() {
-        buttonNext = (AppCompatButton) findViewById(R.id.button_next);
+        buttonNext = findViewById(R.id.button_next);
         buttonNext.setOnClickListener(this);
     }
 
@@ -114,7 +114,7 @@ public class PickDestinationActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if (view == buttonNext) {
-            Intent intent = new Intent(PickDestinationActivity.this, MapsActivity.class);
+            Intent intent = new Intent(PickDestinationActivity.this, PickRouteActivity.class);
             if (currentDestination != null) {
                 double lat = currentDestination.latitude;
                 double lng = currentDestination.longitude;

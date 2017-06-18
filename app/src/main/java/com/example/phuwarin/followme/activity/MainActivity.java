@@ -14,7 +14,6 @@ import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
