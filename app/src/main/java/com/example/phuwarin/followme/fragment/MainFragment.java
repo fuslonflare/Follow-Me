@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.AddMemberActivity;
 import com.example.phuwarin.followme.activity.WaitingActivity;
+import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.position.PositionDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.detail.PositionCollection;
@@ -36,13 +37,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     /**
      * Callback
      **/
+
     Callback<PositionDao> positionDaoCallback = new Callback<PositionDao>() {
         @Override
         public void onResponse(@NonNull Call<PositionDao> call,
                                @NonNull Response<PositionDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
-                    PositionCollection.getInstance().setPositionList(response.body().getData());
+                    if (response.body().getData() != null) {
+                        PositionCollection.getInstance().setPositionList(response.body().getData());
+                        if (AccessToken.getCurrentAccessToken() != null) {
+                            turnOnButton();
+                        }
+                    }
                 } else {
                     showSnackbar("errorCode = " + response.body().getErrorCode());
                 }
@@ -61,7 +68,36 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             showSnackbar(throwable.getMessage());
         }
     };
-    private Call<PositionDao> call;
+    private Call<NormalDao> addMemberCall;
+    private Class destination;
+    Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    if (destination != null) {
+                        Intent intent = new Intent(getActivity(), destination);
+                        startActivity(intent);
+                    }
+                } else {
+                    showSnackbar("Error code: " + response.body().getErrorCode());
+                }
+            } else {
+                try {
+                    showSnackbar("Error message: " + response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar("Error message: " + throwable.getMessage());
+        }
+    };
 
     public MainFragment() {
         super();
@@ -95,17 +131,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         buttonFollower = rootView.findViewById(R.id.button_follower);
         buttonLeader.setOnClickListener(this);
         buttonFollower.setOnClickListener(this);
-
-        if (AccessToken.getCurrentAccessToken() != null) {
-            turnOnButton();
-        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        call = HttpManager.getInstance().getService().loadPosition();
+        Call<PositionDao> call = HttpManager.getInstance().getService().loadPosition();
         call.enqueue(positionDaoCallback);
     }
 
@@ -141,18 +173,33 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == buttonLeader) {
-            Intent intent = new Intent(getActivity(), AddMemberActivity.class);
-            startActivity(intent);
+        if (view == buttonLeader || view == buttonFollower) {
+            if (view == buttonLeader) {
+                User.getInstance().setPosition(
+                        PositionCollection.getInstance().getPositionList().get(1).getId()
+                );
+                destination = AddMemberActivity.class;
+            }
+            if (view == buttonFollower) {
+                User.getInstance().setPosition(
+                        PositionCollection.getInstance().getPositionList().get(0).getId()
+                );
+                destination = WaitingActivity.class;
+            }
+            setUpAddMemberCall();
+            if (addMemberCall != null) {
+                addMemberCall.enqueue(insertUserCallback);
+            }
         }
-        if (view == buttonFollower) {
-            User.getInstance().setPosition(
-                    PositionCollection.getInstance().getPositionList().get(0).getId()
-            );
+    }
 
-            Intent intent = new Intent(getActivity(), WaitingActivity.class);
-            startActivity(intent);
-        }
+    private void setUpAddMemberCall() {
+        String id = User.getInstance().getId();
+        String name = User.getInstance().getName();
+        String position = User.getInstance().getPosition();
+
+        addMemberCall = HttpManager.getInstance().getService().addMember(
+                id, name, position);
     }
 
     private void showSnackbar(String message) {

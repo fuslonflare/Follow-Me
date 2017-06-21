@@ -6,14 +6,28 @@
     android:orientation="vertical"
     tools:context="com.example.phuwarin.followme.activity.AddMemberActivity">
 
-    <FrameLayout
-        android:id="@+id/member_area"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/add_member_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/member_area"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <FrameLayout
+                android:id="@+id/add_member_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

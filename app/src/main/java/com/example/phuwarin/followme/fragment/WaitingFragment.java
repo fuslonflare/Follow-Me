@@ -16,11 +16,9 @@ import android.widget.ImageView;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.StandbyActivity;
-import com.example.phuwarin.followme.dao.InsertUserDao;
 import com.example.phuwarin.followme.dao.trip.JoinTripDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.manager.SharedPreferenceHandler;
-import com.example.phuwarin.followme.util.detail.User;
 
 import net.glxn.qrgen.android.QRCode;
 
@@ -39,29 +37,7 @@ public class WaitingFragment extends Fragment {
     private static final String TAG = "RetrofitTAG";
 
     private ImageView imageQrCode;
-    Callback<InsertUserDao> insertUserCallback = new Callback<InsertUserDao>() {
-        @Override
-        public void onResponse(@NonNull Call<InsertUserDao> call,
-                               @NonNull Response<InsertUserDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess() && response.body().getErrorCode() == 0) {
-                    showSnackbar("Add Member successful");
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
-        @Override
-        public void onFailure(@NonNull Call<InsertUserDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.toString());
-        }
-    };
     private AppCompatTextView textMemberId;
     private String memberId;
     private String tripId;
@@ -76,23 +52,25 @@ public class WaitingFragment extends Fragment {
         public void onResponse(@NonNull Call<JoinTripDao> call,
                                @NonNull Response<JoinTripDao> response) {
             if (response.isSuccessful()) {
-                tripId = response.body().getJoinTripDataDao().getTripId();
-                Log.i(TAG, tripId == null ? "null" : tripId);
+                if (response.body().getJoinTripDataDao() != null) {
+                    tripId = response.body().getJoinTripDataDao().getTripId();
+                    Log.i(TAG, tripId == null ? "null" : tripId);
                 /*Toast.makeText(getActivity(),
                         tripId == null ? "null" : tripId,
                         Toast.LENGTH_SHORT)
                         .show();*/
-                if (tripId != null) {
-                    joinTripCall.clone().cancel();
-                    wantStop = true;
-                    getActivity().finish();
-                    Intent intent = new Intent(getActivity(), StandbyActivity.class);
-                    getActivity().startActivity(intent);
-                }
-                if (!wantStop) {
-                    joinTripCall.clone().enqueue(joinTripCallback);
-                } else {
-                    joinTripCall.clone().cancel();
+                    if (tripId != null) {
+                        joinTripCall.clone().cancel();
+                        wantStop = true;
+                        getActivity().finish();
+                        Intent intent = new Intent(getActivity(), StandbyActivity.class);
+                        getActivity().startActivity(intent);
+                    }
+                    if (!wantStop) {
+                        joinTripCall.clone().enqueue(joinTripCallback);
+                    } else {
+                        joinTripCall.clone().cancel();
+                    }
                 }
             } else {
                 try {
@@ -163,12 +141,6 @@ public class WaitingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        Call<InsertUserDao> addMemberCall = HttpManager.getInstance().getService().addMember(
-                User.getInstance().getId(),
-                User.getInstance().getName(),
-                User.getInstance().getPosition());
-        addMemberCall.enqueue(insertUserCallback);
 
         joinTripCall = HttpManager.getInstance().getService().loadStatusJoinTrip(memberId);
         joinTripCall.clone().enqueue(joinTripCallback);

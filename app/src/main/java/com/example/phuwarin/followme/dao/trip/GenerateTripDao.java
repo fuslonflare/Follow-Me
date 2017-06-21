@@ -1,10 +1,10 @@
 
-package com.example.phuwarin.followme.dao;
+package com.example.phuwarin.followme.dao.trip;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class InsertUserDao {
+public class GenerateTripDao {
 
     @SerializedName("is_success")
     @Expose
@@ -14,7 +14,7 @@ public class InsertUserDao {
     private int errorCode;
     @SerializedName("data")
     @Expose
-    private Object data;
+    private String data;
 
     public boolean isIsSuccess() {
         return isSuccess;
@@ -32,11 +32,11 @@ public class InsertUserDao {
         this.errorCode = errorCode;
     }
 
-    public Object getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 
