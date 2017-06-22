@@ -28,13 +28,19 @@
     <color name="color_accent">#FF4081</color>
     <color name="color_bg_window">#212121</color>
 
-    <color name="color_bg_button_disable">#303030</color>
-    <color name="color_bg_button_leader">@color/blue</color>
-    <color name="color_bg_button_follower">#8BC34A</color>
-    <color name="color_bg_button_next">#76FF03</color>
-    <color name="color_bg_button_next_sparse">#7776FF03</color>
-    <color name="color_bg_button_cancel">@color/deep_red</color>
-    <color name="color_bg_button_start">@color/deep_red</color>
+    <color name="bg_button_disable">#303030</color>
+    <color name="bg_button_leader_normal">@color/blue</color>
+    <color name="bg_button_leader_pressed">#1976d2</color>
+    <color name="bg_button_follower_normal">@color/light_green</color>
+    <color name="bg_button_follower_pressed">#689f38</color>
+    <color name="bg_button_next_normal">#76FF03</color>
+    <color name="bg_button_next_pressed">#64dd17</color>
+    <color name="bg_button_next_sparse_normal">#7776FF03</color>
+    <color name="bg_button_next_sparse_pressed">#77438E04</color>
+    <color name="bg_button_cancel_normal">@color/red</color>
+    <color name="bg_button_cancel_pressed">@color/deep_red</color>
+    <color name="bg_button_start_normal">@color/red</color>
+    <color name="bg_button_start_pressed">@color/deep_red</color>
 
     <color name="color_bg_stage">@color/light_blue</color>
     <color name="color_text_stage">@android:color/black</color>

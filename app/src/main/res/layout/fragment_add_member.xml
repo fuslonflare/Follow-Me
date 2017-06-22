@@ -56,9 +56,9 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@color/color_bg_button_cancel"
+            android:background="@drawable/selector_button_cancel"
             android:text="@string/label_button_cancel"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/white" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_next"
@@ -67,7 +67,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@color/color_bg_button_next"
+            android:background="@drawable/selector_button_next"
             android:text="@string/label_button_next" />
     </LinearLayout>
 
