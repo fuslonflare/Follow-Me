@@ -1,24 +1,32 @@
 <resources>
     <string name="app_name">FollowMe</string>
-    <string name="facebook_app_id">385406521858416</string>
-    <string name="fb_login_protocol_scheme">fb385406521858416</string>
-    <string name="google_place_key">AIzaSyAmsFgR4TjydhlRTP05t0_Dre3ZA29BIqY</string>
+    <string name="facebook_app_id" translatable="false">385406521858416</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb385406521858416</string>
+    <string name="google_place_key" translatable="false">AIzaSyAmsFgR4TjydhlRTP05t0_Dre3ZA29BIqY</string>
 
-    <string name="label_button_leader">Leader Mode</string>
-    <string name="label_button_follower">Follower Mode</string>
+    <string name="label_button_leader" translatable="false">Leader Mode</string>
+    <string name="label_button_follower" translatable="false">Follower Mode</string>
     <string name="label_button_next">Next</string>
     <string name="label_button_cancel">Cancel</string>
 
-    <string name="text_wait_leader">Please wait for your leader to add you to group</string>
-    <string name="text_stage_add_member">Add Member</string>
-    <string name="text_stage_destination">Destination</string>
-    <string name="text_stage_route">Route</string>
+    <string name="text_wait_leader" translatable="false">Please wait for your leader to add you to group</string>
+    <string name="text_stage_add_member" translatable="false">Add Member</string>
+    <string name="text_stage_destination" translatable="false">Destination</string>
+    <string name="text_stage_route" translatable="false">Route</string>
 
     <string name="hint_enter_member_id">Enter member ID</string>
 
     <string name="content_desc_qr_code">Scan with QR Code</string>
     <string name="content_desc_add_member">Add member button</string>
 
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_pick_destination">PickDestination</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="title_activity_pick_destination" translatable="false">PickDestination</string>
+
+    <string name="error_message_346">Connection failed, please check your connection</string>
+    <string name="error_message_347">Wrong request method</string>
+    <string name="error_message_348">Result not found</string>
+    <string name="error_message_349">WTF! Has many result, please check your database\'s structure</string>
+    <string name="error_message_350">Query failed, please check your SQL command</string>
+    <string name="error_message_351">Parameters should not be empty!</string>
+    <string name="error_message_352">User %1$s not found, please check ID</string>
 </resources>

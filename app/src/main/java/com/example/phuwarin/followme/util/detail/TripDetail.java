@@ -2,9 +2,9 @@ package com.example.phuwarin.followme.util.detail;
 
 import android.content.Context;
 
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
+import com.example.phuwarin.followme.manager.ContextBuilder;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by nuuneoi on 11/16/2014.
@@ -15,13 +15,13 @@ public class TripDetail {
     private Context mContext;
 
     private String tripId;
-    private Map<String, String> listMember;
+    private List<String> listMember;
 
     /**
      * Traditional of Singleton ;)
      **/
     private TripDetail() {
-        mContext = Contextor.getInstance().getContext();
+        mContext = ContextBuilder.getInstance().getContext();
     }
 
     public static TripDetail getInstance() {
@@ -39,11 +39,11 @@ public class TripDetail {
         this.tripId = tripId;
     }
 
-    public Map<String, String> getListMember() {
+    public List<String> getListMember() {
         return listMember;
     }
 
-    public void setListMember(Map<String, String> listMember) {
+    public void setListMember(List<String> listMember) {
         this.listMember = listMember;
     }
 }

@@ -18,7 +18,7 @@ import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.StandbyActivity;
 import com.example.phuwarin.followme.dao.trip.JoinTripDao;
 import com.example.phuwarin.followme.manager.HttpManager;
-import com.example.phuwarin.followme.manager.SharedPreferenceHandler;
+import com.example.phuwarin.followme.manager.UserSharedPreferenceHandler;
 
 import net.glxn.qrgen.android.QRCode;
 
@@ -127,7 +127,7 @@ public class WaitingFragment extends Fragment {
         imageQrCode = rootView.findViewById(R.id.image_qr);
         textMemberId = rootView.findViewById(R.id.text_member_id);
 
-        memberId = SharedPreferenceHandler
+        memberId = UserSharedPreferenceHandler
                 .getInstance()
                 .getMemberId(getContext());
 

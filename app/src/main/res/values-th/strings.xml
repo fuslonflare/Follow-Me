@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FollowMe</string>
+    <string name="content_desc_add_member">ปุ่มเพิ่มสมาชิก</string>
+    <string name="content_desc_qr_code">สแกนด้วยคิวอาร์โค้ด</string>
+
+    <string name="error_message_346">ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาตรวจสอบการเชื่อมต่อ</string>
+    <string name="error_message_347">รูปแบบการร้องขอไม่ถูกต้อง</string>
+    <string name="error_message_348">ไม่พบข้อมูล</string>
+    <string name="error_message_349">มีข้อมูลมากมาย ลืมตั้ง Primary Key ไว้หรือเปล่า</string>
+    <string name="error_message_350">เกิดข้อผิดพลาดในการดึงข้อมูลจากฐานข้อมูล</string>
+    <string name="error_message_351">พารามิเตอร์ห้ามเป็นค่าว่าง</string>
+    <string name="error_message_352">ไม่พบข้อมูลผู้ใช้ %1$s ตรวจสอบ ID ที่กรอกอีกทีนึง</string>
+
+    <string name="hint_enter_member_id">กรอก ID ของผู้ร่วมเดินทาง</string>
+
+    <string name="label_button_cancel">ยกเลิก</string>
+    <string name="label_button_next">ต่อไป</string>
+</resources>

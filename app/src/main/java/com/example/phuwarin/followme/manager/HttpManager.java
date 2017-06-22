@@ -3,7 +3,6 @@ package com.example.phuwarin.followme.manager;
 import android.content.Context;
 
 import com.example.phuwarin.followme.manager.http.ApiService;
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,7 +17,7 @@ public class HttpManager {
     private ApiService service;
 
     private HttpManager() {
-        mContext = Contextor.getInstance().getContext();
+        mContext = ContextBuilder.getInstance().getContext();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://webserv.kmitl.ac.th/parietallobe/")

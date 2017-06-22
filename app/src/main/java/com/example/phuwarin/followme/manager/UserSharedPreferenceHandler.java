@@ -3,27 +3,25 @@ package com.example.phuwarin.followme.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
-
 /**
  * Created by nuuneoi on 11/16/2014.
  */
-public class SharedPreferenceHandler {
+public class UserSharedPreferenceHandler {
 
+    private static UserSharedPreferenceHandler instance;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-
-    private static SharedPreferenceHandler instance;
     private Context mContext;
 
     // Lock default constructor.
-    private SharedPreferenceHandler() {
-        mContext = Contextor.getInstance().getContext();
+    private UserSharedPreferenceHandler() {
+        mContext = ContextBuilder.getInstance().getContext();
     }
 
-    public static SharedPreferenceHandler getInstance() {
-        if (instance == null)
-            instance = new SharedPreferenceHandler();
+    public static UserSharedPreferenceHandler getInstance() {
+        if (instance == null) {
+            instance = new UserSharedPreferenceHandler();
+        }
         return instance;
     }
 

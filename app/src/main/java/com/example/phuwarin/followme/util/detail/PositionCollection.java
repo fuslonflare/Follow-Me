@@ -3,7 +3,7 @@ package com.example.phuwarin.followme.util.detail;
 import android.content.Context;
 
 import com.example.phuwarin.followme.dao.position.PositionDataDao;
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
+import com.example.phuwarin.followme.manager.ContextBuilder;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class PositionCollection {
     private List<PositionDataDao> positionList;
 
     private PositionCollection() {
-        mContext = Contextor.getInstance().getContext();
+        mContext = ContextBuilder.getInstance().getContext();
     }
 
     /**

@@ -2,7 +2,7 @@ package com.example.phuwarin.followme.util.detail;
 
 import android.content.Context;
 
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
+import com.example.phuwarin.followme.manager.ContextBuilder;
 
 /**
  * Created by nuuneoi on 11/16/2014.
@@ -17,7 +17,7 @@ public class User {
     private String position;
 
     private User() {
-        mContext = Contextor.getInstance().getContext();
+        mContext = ContextBuilder.getInstance().getContext();
     }
 
     /**

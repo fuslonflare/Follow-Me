@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.manager.SharedPreferenceHandler;
+import com.example.phuwarin.followme.manager.UserSharedPreferenceHandler;
 import com.example.phuwarin.followme.util.detail.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -84,13 +84,13 @@ public class MemberAreaFragment extends Fragment {
             protected void onCurrentProfileChanged(Profile oldProfile,
                                                    Profile currentProfile) {
                 if (currentProfile != null) {
-                    SharedPreferenceHandler
+                    UserSharedPreferenceHandler
                             .getInstance()
                             .setMemberName(getContext(), currentProfile.getName());
-                    SharedPreferenceHandler
+                    UserSharedPreferenceHandler
                             .getInstance()
                             .setMemberPhoto(getContext(), currentProfile.getProfilePictureUri(200, 200).toString());
-                    SharedPreferenceHandler
+                    UserSharedPreferenceHandler
                             .getInstance()
                             .setMemberId(getContext(), currentProfile.getId());
                     setMemberData();
@@ -171,9 +171,9 @@ public class MemberAreaFragment extends Fragment {
     }
 
     private void setMemberData() {
-        String name = SharedPreferenceHandler.getInstance().getMemberName(getContext());
-        String photo = SharedPreferenceHandler.getInstance().getMemberPhoto(getContext());
-        String id = SharedPreferenceHandler.getInstance().getMemberId(getContext());
+        String name = UserSharedPreferenceHandler.getInstance().getMemberName(getContext());
+        String photo = UserSharedPreferenceHandler.getInstance().getMemberPhoto(getContext());
+        String id = UserSharedPreferenceHandler.getInstance().getMemberId(getContext());
         userName.setText(name);
         userId.setText(id);
         Glide.with(getContext())

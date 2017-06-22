@@ -14,7 +14,7 @@ public class NormalDao {
     private int errorCode;
     @SerializedName("data")
     @Expose
-    private Object data;
+    private String data;
 
     public boolean isIsSuccess() {
         return isSuccess;
@@ -32,11 +32,11 @@ public class NormalDao {
         this.errorCode = errorCode;
     }
 
-    public Object getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 

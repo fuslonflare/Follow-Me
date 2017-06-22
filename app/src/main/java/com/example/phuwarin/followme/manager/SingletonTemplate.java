@@ -2,8 +2,6 @@ package com.example.phuwarin.followme.manager;
 
 import android.content.Context;
 
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
-
 /**
  * Created by nuuneoi on 11/16/2014.
  */
@@ -13,7 +11,7 @@ public class SingletonTemplate {
     private Context mContext;
 
     private SingletonTemplate() {
-        mContext = Contextor.getInstance().getContext();
+        mContext = ContextBuilder.getInstance().getContext();
     }
 
     /**

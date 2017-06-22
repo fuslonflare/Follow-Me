@@ -7,32 +7,24 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.PickDestinationActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.trip.GenerateTripDao;
 import com.example.phuwarin.followme.manager.HttpManager;
+import com.example.phuwarin.followme.util.Constant;
 import com.example.phuwarin.followme.util.detail.TripDetail;
 import com.example.phuwarin.followme.util.detail.User;
 import com.example.phuwarin.followme.view.AddMemberField;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,11 +39,11 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     private static final int REQUEST_SCAN_QR_CODE = 9;
     private static final String TAG = "AddMemberFragmentTAG";
 
-    private Map<String, String> memberJoinTrip;
-    private int countComplete;
+    private AppCompatButton buttonCancel;
+    private View rootView;
 
     private AppCompatButton buttonNext;
-    Callback<NormalDao> addTripCallback2 = new Callback<NormalDao>() {
+    Callback<NormalDao> addMemberToJoinTripCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
                                @NonNull Response<NormalDao> response) {
@@ -62,7 +54,13 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                     Intent intent = new Intent(getActivity(), PickDestinationActivity.class);
                     getActivity().startActivity(intent);
                 } else {
-                    showSnackbar("Error code: " + response.body().getErrorCode());
+                    int errorCode = response.body().getErrorCode();
+                    if (errorCode == 352) {
+                        Constant.getInstance().setMessageErrorCode352(
+                                addSpaceAfterComma(response.body().getData()));
+                    }
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
                 }
             } else {
                 try {
@@ -79,6 +77,40 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.toString());
         }
     };
+    private List<String> listIdMember;
+    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService().addMemberToJoinTrip(
+                            extractMemberIdFromList(listIdMember),
+                            TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.toString());
+        }
+    };
+    /**
+     * Callback Zone
+     **/
+
     Callback<GenerateTripDao> generateTripCallback = new Callback<GenerateTripDao>() {
         @Override
         public void onResponse(@NonNull Call<GenerateTripDao> call,
@@ -87,12 +119,12 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                 if (response.body().isIsSuccess()) {
                     TripDetail.getInstance().setTripId(
                             response.body().getData());
-                    Call<NormalDao> addTripCall = HttpManager.getInstance().getService().addTrip(
+                    HttpManager.getInstance().getService().addTrip(
                             User.getInstance().getId(),
-                            TripDetail.getInstance().getTripId());
-                    addTripCall.enqueue(addTripCallback2);
+                            TripDetail.getInstance().getTripId()).enqueue(addTripCallback);
                 } else {
-                    showSnackbar("Error code: " + response.body().getErrorCode());
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
                 }
             } else {
                 try {
@@ -107,51 +139,6 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         public void onFailure(@NonNull Call<GenerateTripDao> call,
                               @NonNull Throwable throwable) {
             showSnackbar(throwable.toString());
-        }
-    };
-    private AppCompatButton buttonCancel;
-    private View rootView;
-    private LinearLayout parent;
-    private String idFromUser;
-    /**
-     * Callback Zone
-     **/
-    GraphRequest.Callback graphRequestCallback = new GraphRequest.Callback() {
-        @Override
-        public void onCompleted(GraphResponse response) {
-            if (response.getError() == null) {
-                JSONObject aResponse = response.getJSONObject();
-                String name = null;
-                String id = null;
-                try {
-                    name = aResponse.getString("name");
-                    id = aResponse.getString("id");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                if (name == null || id == null) {
-                    showToast("ID Invalid, Please recheck.");
-                    return;
-                }
-
-                memberJoinTrip.put(id, name);
-                countComplete = countComplete + 1;
-
-                Log.i(TAG, memberJoinTrip.toString());
-
-                if (countComplete == parent.getChildCount()) {
-                    Log.d(TAG, "Go to PickDestinationActivity");
-
-                    TripDetail.getInstance().setListMember(memberJoinTrip);
-                    Call<GenerateTripDao> generateTripCall = HttpManager.getInstance()
-                            .getService().generateTripId();
-                    generateTripCall.enqueue(generateTripCallback);
-                }
-            } else {
-                countComplete = 0;
-                showToast("ID " + idFromUser + " invalid.");
-            }
         }
     };
 
@@ -169,9 +156,6 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        memberJoinTrip = new HashMap<>();
-        countComplete = 0;
     }
 
     @Override
@@ -236,14 +220,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         }
 
         if (view == buttonNext) {
-            // TODO: DB-User
-
-
             storedMemberById();
-
-            // TODO: DB-CreateTrip
-            // TODO: DB-JoinTrip
-            // TODO: link to ChoosePlaceActivity
         }
 
         /*if (view == buttonAddMember) {
@@ -255,28 +232,44 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             parent.addView(custom);
         }*/
     }
-
+    
     private void storedMemberById() {
-        parent = rootView.findViewById(R.id.parent_add_member);
+        LinearLayout parent = rootView.findViewById(R.id.parent_add_member);
+        listIdMember = new ArrayList<>();
 
         for (int i = 0; i < parent.getChildCount(); i++) {
-            idFromUser = ((AddMemberField) parent.getChildAt(i)).getMemberId();
-            if (!idFromUser.isEmpty()) {
-                GraphRequest graphRequest = new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/" + idFromUser,
-                        null, HttpMethod.GET, graphRequestCallback
-                );
-                graphRequest.executeAsync();
+            String id = ((AddMemberField) parent.getChildAt(i)).getMemberId();
+            if (!id.isEmpty()) {
+                listIdMember.add(id);
             }
         }
+        if (!listIdMember.isEmpty()) {
+            TripDetail.getInstance().setListMember(listIdMember);
+        }
+        HttpManager.getInstance().getService().generateTripId().enqueue(generateTripCallback);
     }
 
-    private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showSnackbar(String message) {
+    private void showSnackbar(CharSequence message) {
         Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private String extractMemberIdFromList(List<String> listMember) {
+        String output = "";
+        for (String id : listMember) {
+            output = output + id + ",";
+        }
+        return output.substring(0, output.length() - 1);
+    }
+
+    private String addSpaceAfterComma(String body) {
+        String output = body;
+        output = output.substring(0, body.length() - 1);
+        String[] listMemberProblem = output.split(",");
+        output = "";
+        for (String aMemberHasProblem : listMemberProblem) {
+            output = output + aMemberHasProblem + ", ";
+        }
+        output = output.substring(0, output.length() - 2);
+        return output;
     }
 }
