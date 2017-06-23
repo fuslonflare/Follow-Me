@@ -77,6 +77,36 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.toString());
         }
     };
+    private List<String> listIdMember;
+    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService().addMemberToJoinTrip(
+                            extractMemberIdFromList(listIdMember),
+                            TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.toString());
+        }
+    };
     /**
      * Callback Zone
      **/
@@ -107,36 +137,6 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
 
         @Override
         public void onFailure(@NonNull Call<GenerateTripDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.toString());
-        }
-    };
-    private List<String> listIdMember;
-    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    HttpManager.getInstance().getService().addMemberToJoinTrip(
-                            extractMemberIdFromList(listIdMember),
-                            TripDetail.getInstance().getTripId())
-                            .enqueue(addMemberToJoinTripCallback);
-                } else {
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
                               @NonNull Throwable throwable) {
             showSnackbar(throwable.toString());
         }
@@ -241,15 +241,14 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             String id = ((AddMemberField) parent.getChildAt(i)).getMemberId();
             if (!id.isEmpty()) {
                 listIdMember.add(id);
-            } else {
-                showSnackbar(getString(R.string.error_message_351));
-                return;
             }
         }
         if (!listIdMember.isEmpty()) {
             TripDetail.getInstance().setListMember(listIdMember);
+            HttpManager.getInstance().getService().generateTripId().enqueue(generateTripCallback);
+        } else {
+            showSnackbar(getString(R.string.error_message_351));
         }
-        HttpManager.getInstance().getService().generateTripId().enqueue(generateTripCallback);
     }
 
     private void showSnackbar(CharSequence message) {
