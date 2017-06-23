@@ -40,9 +40,35 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     private static final String TAG = "AddMemberFragmentTAG";
 
     private AppCompatButton buttonCancel;
-    private View rootView;
-
     private AppCompatButton buttonNext;
+    /**
+     * Callback Zone
+     **/
+
+    Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (!response.body().isIsSuccess()) {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
     Callback<NormalDao> addMemberToJoinTripCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
@@ -77,6 +103,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.toString());
         }
     };
+    private View rootView;
     private List<String> listIdMember;
     Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
         @Override
@@ -107,10 +134,6 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.toString());
         }
     };
-    /**
-     * Callback Zone
-     **/
-
     Callback<GenerateTripDao> generateTripCallback = new Callback<GenerateTripDao>() {
         @Override
         public void onResponse(@NonNull Call<GenerateTripDao> call,
@@ -179,25 +202,27 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onStart() {
         super.onStart();
-    }
 
+        String id = User.getInstance().getId();
+        String name = User.getInstance().getName();
+        String position = User.getInstance().getPosition();
+        HttpManager.getInstance().getService().addMember(
+                id, name, position).enqueue(insertUserCallback);
+    }
+    
     @Override
     public void onStop() {
         super.onStop();
     }
 
-    /*
-     * Save Instance State Here
-     */
+    /** Save Instance State Here **/
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
     }
 
-    /*
-     * Restore Instance State Here
-     */
+    /** Restore Instance State Here **/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -232,7 +257,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             parent.addView(custom);
         }*/
     }
-    
+
     private void storedMemberById() {
         LinearLayout parent = rootView.findViewById(R.id.parent_add_member);
         listIdMember = new ArrayList<>();

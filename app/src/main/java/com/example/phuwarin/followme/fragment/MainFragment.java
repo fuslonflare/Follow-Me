@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.AddMemberActivity;
 import com.example.phuwarin.followme.activity.WaitingActivity;
-import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.position.PositionDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.detail.PositionCollection;
@@ -68,36 +67,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             showSnackbar(throwable.getMessage());
         }
     };
-    private Call<NormalDao> addMemberCall;
     private Class destination;
-    Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    if (destination != null) {
-                        Intent intent = new Intent(getActivity(), destination);
-                        startActivity(intent);
-                    }
-                } else {
-                    showSnackbar("Error code: " + response.body().getErrorCode());
-                }
-            } else {
-                try {
-                    showSnackbar("Error message: " + response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar("Error message: " + throwable.getMessage());
-        }
-    };
 
     public MainFragment() {
         super();
@@ -137,8 +107,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 
-        Call<PositionDao> call = HttpManager.getInstance().getService().loadPosition();
-        call.enqueue(positionDaoCallback);
+        Call<PositionDao> positionCall = HttpManager.getInstance().getService().loadPosition();
+        positionCall.enqueue(positionDaoCallback);
     }
 
     @Override
@@ -146,18 +116,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onStop();
     }
 
-    /*
-     * Save Instance State Here
-     */
+    /** Save Instance State Here **/
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
     }
 
-    /*
-     * Restore Instance State Here
-     */
+    /** Restore Instance State Here **/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -186,20 +152,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 );
                 destination = WaitingActivity.class;
             }
-            setUpAddMemberCall();
-            if (addMemberCall != null) {
-                addMemberCall.enqueue(insertUserCallback);
-            }
+            Intent intent = new Intent(getActivity(), destination);
+            startActivity(intent);
         }
-    }
-
-    private void setUpAddMemberCall() {
-        String id = User.getInstance().getId();
-        String name = User.getInstance().getName();
-        String position = User.getInstance().getPosition();
-
-        addMemberCall = HttpManager.getInstance().getService().addMember(
-                id, name, position);
     }
 
     private void showSnackbar(String message) {

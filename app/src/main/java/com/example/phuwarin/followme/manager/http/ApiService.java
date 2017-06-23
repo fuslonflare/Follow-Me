@@ -49,4 +49,10 @@ public interface ApiService {
             @Field("list_member") String listMember,
             @Field("trip_id") String tripId
     );
+
+    @FormUrlEncoded
+    @POST("delete_user_join_trip.php")
+    Call<NormalDao> deleteUserJoinTrip(
+            @Field("user_id") String userId
+    );
 }

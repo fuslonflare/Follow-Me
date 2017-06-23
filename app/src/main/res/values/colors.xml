@@ -25,8 +25,7 @@
 
     <color name="color_primary">@color/indigo</color> <!--Material 500-->
     <color name="color_primary_dark">#303F9F</color> <!--Material 700-->
-    <!--<color name="color_accent">#FF4081</color>-->
-    <color name="color_accent">@color/yellow</color>
+    <color name="color_accent">#FF4081</color>
     <color name="color_bg_window">#212121</color>
 
     <color name="bg_button_disable">#303030</color>
