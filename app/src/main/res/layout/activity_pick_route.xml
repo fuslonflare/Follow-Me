@@ -42,7 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Request Direction" />
+            android:layout_margin="8dp"
+            android:background="@drawable/selector_button_request_route"
+            android:text="@string/label_button_request_route" />
     </RelativeLayout>
 
     <FrameLayout

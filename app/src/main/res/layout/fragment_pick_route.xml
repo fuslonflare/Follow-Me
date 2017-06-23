@@ -13,22 +13,25 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <RadioButton
+        <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/selector_radio_button"
             android:checked="true"
             android:text="เส้นทางที่ 1"
             android:textColor="@color/white" />
 
-        <RadioButton
+        <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/selector_radio_button"
             android:text="เส้นทางที่ 2"
             android:textColor="@color/white" />
 
-        <RadioButton
+        <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/selector_radio_button"
             android:text="เส้นทางที่ 3"
             android:textColor="@color/white" />
 

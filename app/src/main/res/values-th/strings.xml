@@ -16,4 +16,5 @@
 
     <string name="label_button_cancel">ยกเลิก</string>
     <string name="label_button_next">ต่อไป</string>
+    <string name="label_button_request_route">ร้องขอเส้นทาง</string>
 </resources>

@@ -8,6 +8,7 @@
     <string name="label_button_follower" translatable="false">Follower Mode</string>
     <string name="label_button_next">Next</string>
     <string name="label_button_cancel">Cancel</string>
+    <string name="label_button_request_route">Request Route</string>
 
     <string name="text_wait_leader" translatable="false">Please wait for your leader to add you to group</string>
     <string name="text_stage_add_member" translatable="false">Add Member</string>
