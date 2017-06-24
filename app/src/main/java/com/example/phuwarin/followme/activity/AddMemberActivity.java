@@ -1,11 +1,10 @@
 package com.example.phuwarin.followme.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.fragment.AddMemberFragment;
-import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 
 public class AddMemberActivity extends AppCompatActivity {
 
@@ -17,9 +16,6 @@ public class AddMemberActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.add_member_area, AddMemberFragment.newInstance())
-                    .commit();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.member_area, MemberAreaFragment.newInstance())
                     .commit();
         }
     }

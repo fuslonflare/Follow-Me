@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationAvailability;
@@ -48,12 +47,6 @@ public class MapsActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.member_area, MemberAreaFragment.newInstance(), "MemberAreaFragment")
-                    .commit();
-        }
 
         initUi();
         initInstance();

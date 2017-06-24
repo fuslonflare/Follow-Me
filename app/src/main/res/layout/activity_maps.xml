@@ -1,18 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <fragment
         android:id="@+id/member_area"
+        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        tools:layout="@layout/fragment_member" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map_master"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"

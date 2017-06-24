@@ -6,10 +6,12 @@
     android:orientation="vertical"
     tools:context="com.example.phuwarin.followme.activity.StandbyActivity">
 
-    <FrameLayout
+    <fragment
         android:id="@+id/member_area"
+        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        tools:layout="@layout/fragment_member" />
 
     <FrameLayout
         android:id="@+id/standby_area"

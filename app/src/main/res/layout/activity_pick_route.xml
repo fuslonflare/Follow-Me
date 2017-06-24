@@ -1,13 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_bg_window"
     android:orientation="vertical">
 
-    <FrameLayout
+    <fragment
         android:id="@+id/member_area"
+        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        tools:layout="@layout/fragment_member" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="@dimen/stage_label_width"
@@ -30,7 +33,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <fragment xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map_route"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"

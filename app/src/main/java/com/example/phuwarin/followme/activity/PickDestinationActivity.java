@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 import com.example.phuwarin.followme.fragment.PickDestinationFragment;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -67,11 +66,6 @@ public class PickDestinationActivity extends FragmentActivity
 
         initUi();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.member_area,
-                            MemberAreaFragment.newInstance(),
-                            "MemberAreaFragment")
-                    .commit();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.pick_destination_area,
                             PickDestinationFragment.newInstance(),

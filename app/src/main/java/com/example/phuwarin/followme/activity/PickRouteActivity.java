@@ -24,7 +24,6 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 import com.example.phuwarin.followme.fragment.PickRouteFragment;
 import com.example.phuwarin.followme.manager.ContextBuilder;
 import com.example.phuwarin.followme.util.Colour;
@@ -91,12 +90,6 @@ public class PickRouteActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_route);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.member_area, MemberAreaFragment.newInstance(), "MemberAreaFragment")
-                    .commit();
-        }
 
         initInstance();
         initUi();

@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.fragment.MainFragment;
-import com.example.phuwarin.followme.fragment.MemberAreaFragment;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -27,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_area, MainFragment.newInstance(), "MainFragment")
-                    .commit();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.member_area, MemberAreaFragment.newInstance(), "MemberAreaFragment")
                     .commit();
         }
     }
