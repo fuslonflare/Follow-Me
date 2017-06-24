@@ -80,6 +80,96 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                     Intent intent = new Intent(getActivity(), PickDestinationActivity.class);
                     getActivity().startActivity(intent);
                 } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    private View rootView;
+    private List<String> listIdMember;
+    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService()
+                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
+                                    TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    Callback<GenerateTripDao> generateTripCallback = new Callback<GenerateTripDao>() {
+        @Override
+        public void onResponse(@NonNull Call<GenerateTripDao> call,
+                               @NonNull Response<GenerateTripDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    TripDetail.getInstance().setTripId(
+                            response.body().getData());
+                    HttpManager.getInstance().getService()
+                            .addTrip(User.getInstance().getId(),
+                                    TripDetail.getInstance().getTripId())
+                            .enqueue(addTripCallback);
+                } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<GenerateTripDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    Callback<NormalDao> checkUserExistCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService()
+                            .generateTripId()
+                            .enqueue(generateTripCallback);
+                } else {
                     int errorCode = response.body().getErrorCode();
                     if (errorCode == 352) {
                         Constant.getInstance().setMessageErrorCode352(
@@ -100,68 +190,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         @Override
         public void onFailure(@NonNull Call<NormalDao> call,
                               @NonNull Throwable throwable) {
-            showSnackbar(throwable.toString());
-        }
-    };
-    private View rootView;
-    private List<String> listIdMember;
-    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    HttpManager.getInstance().getService().addMemberToJoinTrip(
-                            extractMemberIdFromList(listIdMember),
-                            TripDetail.getInstance().getTripId())
-                            .enqueue(addMemberToJoinTripCallback);
-                } else {
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.toString());
-        }
-    };
-    Callback<GenerateTripDao> generateTripCallback = new Callback<GenerateTripDao>() {
-        @Override
-        public void onResponse(@NonNull Call<GenerateTripDao> call,
-                               @NonNull Response<GenerateTripDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    TripDetail.getInstance().setTripId(
-                            response.body().getData());
-                    HttpManager.getInstance().getService().addTrip(
-                            User.getInstance().getId(),
-                            TripDetail.getInstance().getTripId()).enqueue(addTripCallback);
-                } else {
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<GenerateTripDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.toString());
+            showSnackbar(throwable.getMessage());
         }
     };
 
@@ -206,10 +235,11 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         String id = User.getInstance().getId();
         String name = User.getInstance().getName();
         String position = User.getInstance().getPosition();
-        HttpManager.getInstance().getService().addMember(
-                id, name, position).enqueue(insertUserCallback);
+        HttpManager.getInstance().getService()
+                .addMember(id, name, position)
+                .enqueue(insertUserCallback);
     }
-    
+
     @Override
     public void onStop() {
         super.onStop();
@@ -270,7 +300,9 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         }
         if (!listIdMember.isEmpty()) {
             TripDetail.getInstance().setListMember(listIdMember);
-            HttpManager.getInstance().getService().generateTripId().enqueue(generateTripCallback);
+            HttpManager.getInstance().getService()
+                    .checkUserExist(extractMemberIdFromList(listIdMember))
+                    .enqueue(checkUserExistCallback);
         } else {
             showSnackbar(getString(R.string.error_message_351));
         }

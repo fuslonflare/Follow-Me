@@ -9,9 +9,13 @@ import com.example.phuwarin.followme.manager.ContextBuilder;
  */
 
 public class MainApplication extends Application {
+
+    private static final String TAG = "LifeCycleTAG";
+
     @Override
     public void onCreate() {
         super.onCreate();
+
         ContextBuilder.getInstance().init(getApplicationContext());
     }
 

@@ -1,8 +1,8 @@
 package com.example.phuwarin.followme.fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -13,14 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.activity.StandbyActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.trip.JoinTripDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.manager.UserSharedPreferenceHandler;
 import com.example.phuwarin.followme.util.Constant;
+import com.example.phuwarin.followme.util.detail.TripDetail;
 import com.example.phuwarin.followme.util.detail.User;
 
 import net.glxn.qrgen.android.QRCode;
@@ -35,12 +36,17 @@ import retrofit2.Response;
  * Created by Phuwarin on 4/5/2017.
  */
 
-public class WaitingFragment extends Fragment {
+public class WaitToAddMemberFragment extends Fragment {
 
     private static final String TAG = "RetrofitTAG";
     private static final String TAG2 = "LifeCycleTAG";
+    private static final int DURATION = 60;
 
     private ImageView imageQrCode;
+    private ProgressBar progressBar;
+    private CountDownTimer timer;
+    private AppCompatTextView textMemberId;
+
     private String memberId;
     private String tripId;
     private boolean wantStop;
@@ -59,9 +65,11 @@ public class WaitingFragment extends Fragment {
                             joinTripCall.clone().cancel();
                             wantStop = true;
 
-                            getActivity().finish();
-                            Intent intent = new Intent(getActivity(), StandbyActivity.class);
-                            getActivity().startActivity(intent);
+                            TripDetail.getInstance().setTripId(tripId);
+
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.waiting_area, WaitToStartTripFragment.newInstance())
+                                    .commit();
                         }
                         if (!wantStop) {
                             joinTripCall.clone().enqueue(joinTripCallback);
@@ -97,8 +105,8 @@ public class WaitingFragment extends Fragment {
                                @NonNull Response<NormalDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
-                    joinTripCall = HttpManager.getInstance()
-                            .getService().loadStatusJoinTrip(memberId);
+                    joinTripCall = HttpManager.getInstance().getService()
+                            .loadStatusJoinTrip(memberId);
                     joinTripCall.clone().enqueue(joinTripCallback);
                 } else {
                     showSnackbar(Constant.getInstance().getMessage(
@@ -120,12 +128,12 @@ public class WaitingFragment extends Fragment {
         }
     };
 
-    public WaitingFragment() {
+    public WaitToAddMemberFragment() {
         super();
     }
 
-    public static WaitingFragment newInstance() {
-        WaitingFragment fragment = new WaitingFragment();
+    public static WaitToAddMemberFragment newInstance() {
+        WaitToAddMemberFragment fragment = new WaitToAddMemberFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -137,13 +145,28 @@ public class WaitingFragment extends Fragment {
 
         tripId = null;
         wantStop = false;
+
+        timer = new CountDownTimer(DURATION * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int progress = (int) (100 * (millisUntilFinished / 1000) / DURATION);
+                if (progressBar != null) {
+                    progressBar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                getActivity().finish();
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_waiting, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_wait_to_add_member, container, false);
         initInstances(rootView);
         return rootView;
     }
@@ -151,17 +174,18 @@ public class WaitingFragment extends Fragment {
     private void initInstances(View rootView) {
         // Init 'View' instance(s) with rootView.findViewById here
         imageQrCode = rootView.findViewById(R.id.image_qr);
-        AppCompatTextView textMemberId = rootView.findViewById(R.id.text_member_id);
+        textMemberId = rootView.findViewById(R.id.text_member_id);
+        progressBar = rootView.findViewById(R.id.progress_bar);
 
         memberId = UserSharedPreferenceHandler
                 .getInstance()
                 .getMemberId(getContext());
+        textMemberId.setText(memberId);
+
 
         Bitmap myQr = QRCode.from(memberId)
                 .bitmap();
         imageQrCode.setImageBitmap(myQr);
-
-        textMemberId.setText(memberId);
     }
 
     @Override
@@ -171,52 +195,36 @@ public class WaitingFragment extends Fragment {
         String id = User.getInstance().getId();
         String name = User.getInstance().getName();
         String position = User.getInstance().getPosition();
-        HttpManager.getInstance().getService().addMember(
-                id, name, position).enqueue(insertUserCallback);
+        HttpManager.getInstance().getService()
+                .addMember(id, name, position)
+                .enqueue(insertUserCallback);
+
+        progressBar.setProgress(100);
+        timer.start();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG2, "onStop");
+        Log.d(TAG2, "Fragment onStop");
         Log.d(TAG, "onStop");
         wantStop = true;
 
-        HttpManager.getInstance().getService().deleteUserJoinTrip(
-                User.getInstance().getId()).enqueue(new Callback<NormalDao>() {
-            @Override
-            public void onResponse(@NonNull Call<NormalDao> call,
-                                   @NonNull Response<NormalDao> response) {
-                if (response.isSuccessful()) {
-                    if (!response.body().isIsSuccess()) {
-                        showSnackbar(Constant.getInstance().getMessage(
-                                response.body().getErrorCode()));
-                    }
-                } else {
-                    try {
-                        showSnackbar(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<NormalDao> call,
-                                  @NonNull Throwable throwable) {
-                showSnackbar(throwable.getMessage());
-            }
-        });
+        timer.cancel();
     }
 
-    /** Save Instance State Here **/
+    /**
+     * Save Instance State Here
+     **/
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
     }
 
-    /** Restore Instance State Here **/
+    /**
+     * Restore Instance State Here
+     **/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

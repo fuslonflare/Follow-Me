@@ -30,4 +30,5 @@
     <string name="error_message_350">Query failed, please check your SQL command</string>
     <string name="error_message_351">Parameters should not be empty!</string>
     <string name="error_message_352">User %1$s not found, please check ID</string>
+    <string name="error_message_4869">Error: 4869 "Shi-Ya-Ro-Ku"</string>
 </resources>

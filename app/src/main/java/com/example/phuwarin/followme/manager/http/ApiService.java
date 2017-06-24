@@ -23,7 +23,7 @@ public interface ApiService {
     Call<GenerateTripDao> generateTripId();
 
     @FormUrlEncoded
-    @POST("check_for_start.php")
+    @POST("check_for_added.php")
     Call<JoinTripDao> loadStatusJoinTrip(
             @Field("user_id") String userId
     );
@@ -54,5 +54,17 @@ public interface ApiService {
     @POST("delete_user_join_trip.php")
     Call<NormalDao> deleteUserJoinTrip(
             @Field("user_id") String userId
+    );
+
+    @FormUrlEncoded
+    @POST("check_for_start.php")
+    Call<NormalDao> loadRouteTrip(
+            @Field("trip_id") String tripId
+    );
+
+    @FormUrlEncoded
+    @POST("check_user_exist.php")
+    Call<NormalDao> checkUserExist(
+            @Field("list_member") String listMember
     );
 }

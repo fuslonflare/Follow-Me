@@ -40,6 +40,7 @@ public class Constant {
         mapErrorCode.put(349, mContext.getString(R.string.error_message_349));
         mapErrorCode.put(350, mContext.getString(R.string.error_message_350));
         mapErrorCode.put(351, mContext.getString(R.string.error_message_351));
+
     }
 
     public void setMessageErrorCode352(String text) {

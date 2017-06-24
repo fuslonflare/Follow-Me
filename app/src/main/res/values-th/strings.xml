@@ -17,4 +17,5 @@
     <string name="label_button_cancel">ยกเลิก</string>
     <string name="label_button_next">ต่อไป</string>
     <string name="label_button_request_route">ร้องขอเส้นทาง</string>
+    <string name="error_message_4869">ข้อผิดพลาด 4869: นักสืบขั้นทดลอง</string>
 </resources>
