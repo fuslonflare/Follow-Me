@@ -182,6 +182,7 @@ public class PickRouteActivity extends FragmentActivity
                 getLocationAvailability(mGoogleApiClient);
         if (availability.isLocationAvailable()) {
             showToast("Location available");
+            buttonRequestDirection.setVisibility(View.VISIBLE);
 
             LocationRequest request = new LocationRequest()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
