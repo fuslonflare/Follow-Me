@@ -15,6 +15,7 @@ public class TripDetail {
     private Context mContext;
 
     private String tripId;
+    private BicycleRoute tripRoute;
     private List<String> listMember;
 
     /**

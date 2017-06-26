@@ -2,7 +2,7 @@ package com.example.phuwarin.followme.manager.http;
 
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.position.PositionDao;
-import com.example.phuwarin.followme.dao.trip.GenerateTripDao;
+import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.dao.trip.JoinTripDao;
 
 import retrofit2.Call;
@@ -20,7 +20,16 @@ public interface ApiService {
     Call<PositionDao> loadPosition();
 
     @GET("generate_trip_id.php")
-    Call<GenerateTripDao> generateTripId();
+    Call<GenerateDao> generateTripId();
+
+    @GET("generate_destination_id.php")
+    Call<GenerateDao> generateDestinationId();
+
+    @GET("generate_origin_id.php")
+    Call<GenerateDao> generateOriginId();
+
+    @GET("generate_route_id.php")
+    Call<GenerateDao> generateRouteId();
 
     @FormUrlEncoded
     @POST("check_for_added.php")
@@ -66,5 +75,34 @@ public interface ApiService {
     @POST("check_user_exist.php")
     Call<NormalDao> checkUserExist(
             @Field("list_member") String listMember
+    );
+
+    @FormUrlEncoded
+    @POST("add_destination.php")
+    Call<NormalDao> addDestination(
+            @Field("dest_id") String id,
+            @Field("dest_name_en") String nameEn,
+            @Field("dest_name_th") String nameTh,
+            @Field("dest_lat") double lat,
+            @Field("dest_lng") double lng
+    );
+
+    @FormUrlEncoded
+    @POST("add_origin.php")
+    Call<NormalDao> addOrigin(
+            @Field("origin_id") String id,
+            @Field("origin_name_en") String nameEn,
+            @Field("origin_name_th") String nameTh,
+            @Field("origin_lat") double lat,
+            @Field("origin_lng") double lng
+    );
+
+    @FormUrlEncoded
+    @POST("add_bicycle_route.php")
+    Call<NormalDao> addBicycleRoute(
+            @Field("route_id") String id,
+            @Field("route_path") String path,
+            @Field("trip_origin") String originId,
+            @Field("trip_dest") String destinationId
     );
 }

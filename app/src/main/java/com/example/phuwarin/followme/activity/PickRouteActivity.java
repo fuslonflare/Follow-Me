@@ -3,6 +3,8 @@ package com.example.phuwarin.followme.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,9 +26,15 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phuwarin.followme.R;
+import com.example.phuwarin.followme.dao.NormalDao;
+import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.fragment.PickRouteFragment;
 import com.example.phuwarin.followme.manager.ContextBuilder;
+import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.Colour;
+import com.example.phuwarin.followme.util.Constant;
+import com.example.phuwarin.followme.util.detail.BicycleRoute;
+import com.example.phuwarin.followme.util.detail.Origin;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationAvailability;
@@ -46,8 +54,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PickRouteActivity extends FragmentActivity
         implements OnMapReadyCallback, View.OnClickListener,
@@ -65,10 +79,73 @@ public class PickRouteActivity extends FragmentActivity
 
     private String API_KEY;
     private GoogleApiClient mGoogleApiClient;
-    private Marker mMarker;
+    private Marker mOriginMarker;
     private AppCompatButton buttonRequestDirection;
     private LatLng origin;
     private LatLng destination;
+    private Callback<NormalDao> addOriginCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (!response.body().isIsSuccess()) {
+                    int errorCode = response.body().getErrorCode();
+                    showSnackbar(Constant.getInstance().getMessage(errorCode));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    /**
+     * Callback Zone
+     **/
+    private Callback<GenerateDao> generateOriginCallback = new Callback<GenerateDao>() {
+        @Override
+        public void onResponse(@NonNull Call<GenerateDao> call,
+                               @NonNull Response<GenerateDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    String id = response.body().getData();
+                    Origin.getInstance().setOriginId(id);
+
+                    HttpManager.getInstance().getService()
+                            .addOrigin(
+                                    Origin.getInstance().getOriginId(),
+                                    Origin.getInstance().getOriginNameEn(),
+                                    Origin.getInstance().getOriginNameTh(),
+                                    Origin.getInstance().getOriginLocation().latitude,
+                                    Origin.getInstance().getOriginLocation().longitude)
+                            .enqueue(addOriginCallback);
+                } else {
+                    int errorCode = response.body().getErrorCode();
+                    showSnackbar(Constant.getInstance().getMessage(errorCode));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<GenerateDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
 
     public static int getSizeOfRoute() {
         return sizeOfRoute;
@@ -83,6 +160,9 @@ public class PickRouteActivity extends FragmentActivity
                     ContextBuilder.getInstance().getContext(),
                     route.get(which).getLegList().get(0).getDirectionPoint(),
                     5, Color.parseColor(Colour.RED.getCode())));
+            BicycleRoute.getInstance().setRoutePath(
+                    route.get(which).getOverviewPolyline().getRawPointList()
+            );
         }
     }
 
@@ -155,7 +235,7 @@ public class PickRouteActivity extends FragmentActivity
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showSnackBar(String message) {
+    private void showSnackbar(CharSequence message) {
         Snackbar.make(buttonRequestDirection,
                 Html.fromHtml("<font color=\"#ffffff\">" + message + "</font>"),
                 Snackbar.LENGTH_SHORT).show();
@@ -164,7 +244,50 @@ public class PickRouteActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_request_direction) {
+            HttpManager.getInstance().getService()
+                    .generateOriginId()
+                    .enqueue(generateOriginCallback);
+
+            Origin.getInstance().setOriginLocation(origin);
+            Origin.getInstance().setOriginNameEn(getAddressLineFromLocation(origin));
+            Origin.getInstance().setOriginNameTh(getAddressLineFromLocation(origin));
+
             requestDirection();
+        }
+    }
+
+    private String getAddressLineFromLocation(LatLng location) {
+        List<Address> addresses = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses != null && addresses.size() != 0) {
+            int trim = 0;
+            Address address = addresses.get(0);
+            String addressLine;
+            do {
+                addressLine = "";
+                if (address.getMaxAddressLineIndex() > 0) {
+                    for (int i = 0; i < address.getMaxAddressLineIndex() - trim; i++) {
+                        addressLine += address.getAddressLine(i) + " ";
+                    }
+                    trim++;
+                } else {
+                    showSnackbar("This location no address lines");
+                }
+            } while (addressLine.length() > 100);
+
+            if (addressLine.length() > 0) {
+                return addressLine;
+            }
+            return "";
+        } else {
+            return "";
         }
     }
 
@@ -218,13 +341,14 @@ public class PickRouteActivity extends FragmentActivity
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
         }
 
-        if (mMarker != null) {
-            mMarker.remove();
+        if (mOriginMarker != null) {
+            mOriginMarker.remove();
         }
 
-        mMarker = mMap.addMarker(new MarkerOptions()
+        mOriginMarker = mMap.addMarker(new MarkerOptions()
                 .position(currentLocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location)));
+
         /*if (directionPositionList != null) {
             if (directionPositionList.size() > 0) {
                 if (isWrongWay(currentLocation, directionPositionList, DISTANCE_THRESHOLD)) {
@@ -279,7 +403,7 @@ public class PickRouteActivity extends FragmentActivity
     }
 
     private void requestDirection() {
-        showSnackBar("Requesting Direction...");
+        showSnackbar("Requesting Direction...");
 
         GoogleDirection.withServerKey(API_KEY)
                 .from(origin)
@@ -292,7 +416,7 @@ public class PickRouteActivity extends FragmentActivity
 
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
-        showSnackBar(direction.getStatus());
+        showSnackbar(direction.getStatus());
         if (direction.isOK()) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.pick_route_area, PickRouteFragment.newInstance(), "PickRouteFragment")
@@ -308,6 +432,9 @@ public class PickRouteActivity extends FragmentActivity
                     ContextBuilder.getInstance().getContext(),
                     route.get(0).getLegList().get(0).getDirectionPoint(),
                     5, Color.parseColor(Colour.RED.getCode())));
+            BicycleRoute.getInstance().setRoutePath(
+                    route.get(0).getOverviewPolyline().getRawPointList()
+            );
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(origin);
@@ -324,6 +451,6 @@ public class PickRouteActivity extends FragmentActivity
 
     @Override
     public void onDirectionFailure(Throwable throwable) {
-        showSnackBar(throwable.getMessage());
+        showSnackbar(throwable.getMessage());
     }
 }
