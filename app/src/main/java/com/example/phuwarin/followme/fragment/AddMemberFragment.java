@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.PickDestinationActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
-import com.example.phuwarin.followme.dao.trip.GenerateTripDao;
+import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.Constant;
 import com.example.phuwarin.followme.util.detail.TripDetail;
@@ -98,41 +98,10 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.getMessage());
         }
     };
-    private View rootView;
-    private List<String> listIdMember;
-    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+    Callback<GenerateDao> generateTripCallback = new Callback<GenerateDao>() {
         @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    HttpManager.getInstance().getService()
-                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
-                                    TripDetail.getInstance().getTripId())
-                            .enqueue(addMemberToJoinTripCallback);
-                } else {
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.getMessage());
-        }
-    };
-    Callback<GenerateTripDao> generateTripCallback = new Callback<GenerateTripDao>() {
-        @Override
-        public void onResponse(@NonNull Call<GenerateTripDao> call,
-                               @NonNull Response<GenerateTripDao> response) {
+        public void onResponse(@NonNull Call<GenerateDao> call,
+                               @NonNull Response<GenerateDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
                     TripDetail.getInstance().setTripId(
@@ -155,7 +124,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         }
 
         @Override
-        public void onFailure(@NonNull Call<GenerateTripDao> call,
+        public void onFailure(@NonNull Call<GenerateDao> call,
                               @NonNull Throwable throwable) {
             showSnackbar(throwable.getMessage());
         }
@@ -175,6 +144,37 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                         Constant.getInstance().setMessageErrorCode352(
                                 addSpaceAfterComma(response.body().getData()));
                     }
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    private View rootView;
+    private List<String> listIdMember;
+    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService()
+                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
+                                    TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
                     showSnackbar(Constant.getInstance().getMessage(
                             response.body().getErrorCode()));
                 }

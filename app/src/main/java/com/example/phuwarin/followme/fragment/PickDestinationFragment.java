@@ -22,7 +22,6 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 
 public class PickDestinationFragment extends Fragment {
 
-
     /***
      *** Listener Zone ******/
     PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
@@ -79,18 +78,18 @@ public class PickDestinationFragment extends Fragment {
         super.onStop();
     }
 
-    /*
+    /**
      * Save Instance State Here
-     */
+     **/
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
     }
 
-    /*
+    /**
      * Restore Instance State Here
-     */
+     **/
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -102,4 +101,5 @@ public class PickDestinationFragment extends Fragment {
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
+
 }

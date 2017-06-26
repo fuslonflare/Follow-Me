@@ -21,6 +21,7 @@ import com.example.phuwarin.followme.activity.PickRouteActivity;
 public class PickRouteFragment extends Fragment
         implements View.OnClickListener {
 
+
     /*** Listener Zone ***/
     RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
