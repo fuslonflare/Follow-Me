@@ -4,7 +4,7 @@ package com.example.phuwarin.followme.dao.trip;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GenerateTripDao {
+public class GenerateDao {
 
     @SerializedName("is_success")
     @Expose
