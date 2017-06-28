@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.dao.NormalDao;
@@ -38,19 +39,27 @@ import retrofit2.Response;
 
 public class WaitToAddMemberFragment extends Fragment {
 
+    /**
+     * Constant variable
+     **/
+
     private static final String TAG = "RetrofitTAG";
     private static final String TAG2 = "LifeCycleTAG";
+    private static final String TAG3 = "TimerTAG";
     private static final int DURATION = 60;
 
+    /**
+     * Member variable **/
     private ImageView imageQrCode;
     private ProgressBar progressBar;
     private CountDownTimer timer;
     private AppCompatTextView textMemberId;
+    private AppCompatTextView tvCountdown;
 
     private String memberId;
     private String tripId;
     private boolean wantStop;
-
+    private long timeRemaining;
     private Call<JoinTripDao> joinTripCall;
     Callback<JoinTripDao> joinTripCallback = new Callback<JoinTripDao>() {
         @Override
@@ -96,8 +105,7 @@ public class WaitToAddMemberFragment extends Fragment {
         }
     };
     /**
-     * Callback Zone
-     **/
+     * Callback Zone **/
 
     Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
         @Override
@@ -128,6 +136,8 @@ public class WaitToAddMemberFragment extends Fragment {
         }
     };
 
+    /**
+     * Default Constructor */
     public WaitToAddMemberFragment() {
         super();
     }
@@ -139,27 +149,15 @@ public class WaitToAddMemberFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Overridden method */
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         tripId = null;
         wantStop = false;
-
-        timer = new CountDownTimer(DURATION * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int progress = (int) (100 * (millisUntilFinished / 1000) / DURATION);
-                if (progressBar != null) {
-                    progressBar.setProgress(progress);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                getActivity().finish();
-            }
-        };
     }
 
     @Override
@@ -171,21 +169,17 @@ public class WaitToAddMemberFragment extends Fragment {
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-        imageQrCode = rootView.findViewById(R.id.image_qr);
-        textMemberId = rootView.findViewById(R.id.text_member_id);
-        progressBar = rootView.findViewById(R.id.progress_bar);
-
-        memberId = UserSharedPreferenceHandler
-                .getInstance()
-                .getMemberId(getContext());
-        textMemberId.setText(memberId);
-
-
-        Bitmap myQr = QRCode.from(memberId)
-                .bitmap();
-        imageQrCode.setImageBitmap(myQr);
+    /**
+     * Restore Instance State Here
+     **/
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            timeRemaining = DURATION * 1000;
+        } else {
+            timeRemaining = savedInstanceState.getLong("timeRemaining", DURATION * 1000);
+        }
     }
 
     @Override
@@ -200,17 +194,24 @@ public class WaitToAddMemberFragment extends Fragment {
                 .enqueue(insertUserCallback);
 
         progressBar.setProgress(100);
-        timer.start();
-    }
+        timer = new CountDownTimer(timeRemaining, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvCountdown.setText(millisUntilFinished / 1000 + "");
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG2, "Fragment onStop");
-        Log.d(TAG, "onStop");
-        wantStop = true;
+                timeRemaining = millisUntilFinished;
 
-        timer.cancel();
+                int progress = (int) (100 * millisUntilFinished / (DURATION * 1000));
+                if (progressBar != null) {
+                    progressBar.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                getActivity().finish();
+            }
+        }.start();
     }
 
     /**
@@ -219,21 +220,41 @@ public class WaitToAddMemberFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // Save Instance State here
+
+        outState.putLong("timeRemaining", timeRemaining);
     }
 
-    /**
-     * Restore Instance State Here
-     **/
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore Instance State here
-        }
+    public void onStop() {
+        super.onStop();
+
+        wantStop = true;
+        timer.cancel();
+    }
+
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+        imageQrCode = rootView.findViewById(R.id.image_qr);
+        textMemberId = rootView.findViewById(R.id.text_member_id);
+        tvCountdown = rootView.findViewById(R.id.text_countdown);
+        progressBar = rootView.findViewById(R.id.progress_bar);
+
+        memberId = UserSharedPreferenceHandler
+                .getInstance()
+                .getMemberId(getContext());
+        textMemberId.setText(memberId);
+
+
+        Bitmap myQr = QRCode.from(memberId)
+                .bitmap();
+        imageQrCode.setImageBitmap(myQr);
     }
 
     private void showSnackbar(CharSequence message) {
         Snackbar.make(imageQrCode, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showToast(CharSequence message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

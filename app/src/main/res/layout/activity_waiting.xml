@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/member_area"
-        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        tools:layout="@layout/fragment_member" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/waiting_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/member_area"
+                android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:layout="@layout/fragment_member"/>
+
+            <FrameLayout
+                android:id="@+id/waiting_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
