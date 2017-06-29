@@ -1,34 +1,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/member_area"
-        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        tools:layout="@layout/fragment_member" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/map_master"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.example.phuwarin.followme.activity.MapsActivity" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_finish"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
-            android:background="@color/green"
-            android:text="Finish" />
-    </RelativeLayout>
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/member_area"
+                android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:layout="@layout/fragment_member"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <fragment
+                    android:id="@+id/map_master"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="com.example.phuwarin.followme.activity.MapsActivity"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/button_finish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="10dp"
+                    android:background="@color/green"
+                    android:text="Finish"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

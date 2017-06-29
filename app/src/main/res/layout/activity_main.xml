@@ -6,16 +6,27 @@
     android:orientation="vertical"
     tools:context="com.example.phuwarin.followme.activity.MainActivity">
 
-    <fragment
-        android:id="@+id/member_area"
-        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        tools:layout="@layout/fragment_member" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/content_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <fragment
+                android:id="@+id/member_area"
+                android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:layout="@layout/fragment_member"/>
+
+            <FrameLayout
+                android:id="@+id/content_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

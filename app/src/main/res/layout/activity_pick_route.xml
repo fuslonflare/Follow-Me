@@ -5,55 +5,69 @@
     android:background="@color/color_bg_window"
     android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/member_area"
-        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        tools:layout="@layout/fragment_member" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="@dimen/stage_label_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/stage_label_margin_top"
-        android:background="@drawable/bg_stage_label"
-        android:drawableLeft="@drawable/ic_directions_bike"
-        android:drawablePadding="@dimen/stage_label_drawable_padding"
-        android:drawableStart="@drawable/ic_directions_bike"
-        android:gravity="center_vertical"
-        android:paddingBottom="@dimen/stage_label_padding_y"
-        android:paddingLeft="@dimen/stage_label_padding_x"
-        android:paddingRight="@dimen/stage_label_padding_x"
-        android:paddingTop="@dimen/stage_label_padding_y"
-        android:text="@string/text_stage_route"
-        android:textColor="@color/color_text_stage" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <fragment
-            android:id="@+id/map_route"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.example.phuwarin.followme.activity.PickRouteActivity" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_request_direction"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
-            android:background="@drawable/selector_button_request_route"
-            android:text="@string/label_button_request_route"
-            android:visibility="gone" />
-    </RelativeLayout>
+            android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/pick_route_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <fragment
+                android:id="@+id/member_area"
+                android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:layout="@layout/fragment_member"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="@dimen/stage_label_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/stage_label_margin_top"
+                android:background="@drawable/bg_stage_label"
+                android:drawableLeft="@drawable/ic_directions_bike"
+                android:drawablePadding="@dimen/stage_label_drawable_padding"
+                android:drawableStart="@drawable/ic_directions_bike"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/stage_label_padding_y"
+                android:paddingLeft="@dimen/stage_label_padding_x"
+                android:paddingRight="@dimen/stage_label_padding_x"
+                android:paddingTop="@dimen/stage_label_padding_y"
+                android:text="@string/text_stage_route"
+                android:textColor="@color/color_text_stage"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <fragment
+                    android:id="@+id/map_route"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="com.example.phuwarin.followme.activity.PickRouteActivity"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/button_request_direction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/selector_button_request_route"
+                    android:text="@string/label_button_request_route"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/pick_route_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
