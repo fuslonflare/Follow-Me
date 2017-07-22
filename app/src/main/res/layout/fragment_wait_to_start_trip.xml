@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg_window">
+    android:background="@color/color_bg_window"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please Standby..."
+        android:textColor="@android:color/white"
+        android:textSize="32sp"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:indeterminate="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Please Standby~"
-            android:textColor="@android:color/white"
-            android:textSize="32sp" />
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:textSize="28sp"/>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:indeterminate="true"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

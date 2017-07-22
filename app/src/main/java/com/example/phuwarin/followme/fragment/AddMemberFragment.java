@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.activity.PickDestinationActivity;
+import com.example.phuwarin.followme.activity.TravelActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.manager.HttpManager;
@@ -40,12 +40,13 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     private static final String TAG = "AddMemberFragmentTAG";
 
     private AppCompatButton buttonCancel;
-    private AppCompatButton buttonNext;
+    private AppCompatButton buttonStart;
+
     /**
      * Callback Zone
      **/
 
-    Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
+    private Callback<NormalDao> insertUserCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
                                @NonNull Response<NormalDao> response) {
@@ -69,7 +70,8 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.getMessage());
         }
     };
-    Callback<NormalDao> addMemberToJoinTripCallback = new Callback<NormalDao>() {
+
+    private Callback<NormalDao> addMemberToJoinTripCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
                                @NonNull Response<NormalDao> response) {
@@ -77,7 +79,8 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
                 if (response.body().isIsSuccess()) {
                     getActivity().finish();
 
-                    Intent intent = new Intent(getActivity(), PickDestinationActivity.class);
+                    Intent intent = new Intent(getActivity(), TravelActivity.class);
+                    intent.putExtra("isLeader", true);
                     getActivity().startActivity(intent);
                 } else {
                     showSnackbar(Constant.getInstance().getMessage(
@@ -98,7 +101,72 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.getMessage());
         }
     };
-    Callback<GenerateDao> generateTripCallback = new Callback<GenerateDao>() {
+    private View rootView;
+    private List<String> listIdMember;
+    private Callback<NormalDao> checkUserExistCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService()
+                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
+                                    TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
+                    int errorCode = response.body().getErrorCode();
+                    if (errorCode == 352) {
+                        Constant.getInstance().setMessageErrorCode352(
+                                addSpaceAfterComma(response.body().getData()));
+                    }
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    private Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    HttpManager.getInstance().getService()
+                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
+                                    TripDetail.getInstance().getTripId())
+                            .enqueue(addMemberToJoinTripCallback);
+                } else {
+                    showSnackbar(Constant.getInstance().getMessage(
+                            response.body().getErrorCode()));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    private Callback<GenerateDao> generateTripCallback = new Callback<GenerateDao>() {
         @Override
         public void onResponse(@NonNull Call<GenerateDao> call,
                                @NonNull Response<GenerateDao> response) {
@@ -129,70 +197,6 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             showSnackbar(throwable.getMessage());
         }
     };
-    Callback<NormalDao> checkUserExistCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    HttpManager.getInstance().getService()
-                            .generateTripId()
-                            .enqueue(generateTripCallback);
-                } else {
-                    int errorCode = response.body().getErrorCode();
-                    if (errorCode == 352) {
-                        Constant.getInstance().setMessageErrorCode352(
-                                addSpaceAfterComma(response.body().getData()));
-                    }
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.getMessage());
-        }
-    };
-    private View rootView;
-    private List<String> listIdMember;
-    Callback<NormalDao> addTripCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    HttpManager.getInstance().getService()
-                            .addMemberToJoinTrip(extractMemberIdFromList(listIdMember),
-                                    TripDetail.getInstance().getTripId())
-                            .enqueue(addMemberToJoinTripCallback);
-                } else {
-                    showSnackbar(Constant.getInstance().getMessage(
-                            response.body().getErrorCode()));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.getMessage());
-        }
-    };
 
     public AddMemberFragment() {
         super();
@@ -219,30 +223,15 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-        buttonNext = rootView.findViewById(R.id.button_next);
-        buttonCancel = rootView.findViewById(R.id.button_cancel);
-
-        buttonNext.setOnClickListener(this);
-        buttonCancel.setOnClickListener(this);
-    }
-
+    /**
+     * Restore Instance State Here
+     **/
     @Override
-    public void onStart() {
-        super.onStart();
-
-        String id = User.getInstance().getId();
-        String name = User.getInstance().getName();
-        String position = User.getInstance().getPosition();
-        HttpManager.getInstance().getService()
-                .addMember(id, name, position)
-                .enqueue(insertUserCallback);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore Instance State here
+        }
     }
 
     /** Save Instance State Here **/
@@ -252,13 +241,18 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
         // Save Instance State here
     }
 
-    /** Restore Instance State Here **/
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore Instance State here
-        }
+    public void onStop() {
+        super.onStop();
+    }
+
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+        buttonStart = rootView.findViewById(R.id.button_start);
+        buttonCancel = rootView.findViewById(R.id.button_cancel);
+
+        buttonStart.setOnClickListener(this);
+        buttonCancel.setOnClickListener(this);
     }
 
     @Override
@@ -274,7 +268,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
             getActivity().finish();
         }
 
-        if (view == buttonNext) {
+        if (view == buttonStart) {
             storedMemberById();
         }
 
@@ -309,7 +303,7 @@ public class AddMemberFragment extends Fragment implements View.OnClickListener 
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(buttonStart, message, Snackbar.LENGTH_LONG).show();
     }
 
     private String extractMemberIdFromList(List<String> listMember) {

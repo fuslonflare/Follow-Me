@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.activity.MapsActivity;
+import com.example.phuwarin.followme.activity.AddMemberActivity;
 import com.example.phuwarin.followme.activity.PickRouteActivity;
+import com.example.phuwarin.followme.activity.PickWaypointsActivity;
+import com.example.phuwarin.followme.activity.TravelActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.manager.HttpManager;
@@ -36,25 +38,65 @@ import retrofit2.Response;
 public class PickRouteFragment extends Fragment
         implements View.OnClickListener {
 
+    private RadioGroup radioGroupRoute;
+    private AppCompatButton buttonNext;
     /*** Listener Zone ***/
-    RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+    private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
             int x = group.indexOfChild(group.findViewById(checkedId));
             PickRouteActivity.showRoute(x);
         }
     };
-    private RadioGroup radioGroupRoute;
-    private AppCompatButton buttonStart;
-    Callback<NormalDao> addRouteCallback = new Callback<NormalDao>() {
+    /*** Callback Zone ***/
+    private Callback<GenerateDao> generateRouteCallback = new Callback<GenerateDao>() {
+        @Override
+        public void onResponse(@NonNull Call<GenerateDao> call,
+                               @NonNull Response<GenerateDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    String id = response.body().getData();
+                    BicycleRoute.getInstance().setRouteId(id);
+                    BicycleRoute.getInstance().setRouteOrigin(Origin.getInstance());
+                    BicycleRoute.getInstance().setRouteDestination(Destination.getInstance());
+
+                    /*HttpManager.getInstance().getService()
+                            .addBicycleRoute(
+                                    BicycleRoute.getInstance().getId(),
+                                    BicycleRoute.getInstance().getPath(),
+                                    BicycleRoute.getInstance().getRouteOrigin().getOriginId(),
+                                    BicycleRoute.getInstance().getRouteDestination().getDestinationId()
+                            ).enqueue(addRouteCallback);*/
+
+                    Intent intent = new Intent(getActivity(), PickWaypointsActivity.class);
+                    startActivity(intent);
+                } else {
+                    int errorCode = response.body().getErrorCode();
+                    showSnackbar(Constant.getInstance().getMessage(errorCode));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<GenerateDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
+    private Callback<NormalDao> addRouteCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
                                @NonNull Response<NormalDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
-                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    Intent intent = new Intent(getActivity(), PickWaypointsActivity.class);
                     startActivity(intent);
-                    getActivity().finish();
                 } else {
                     int errorCode = response.body().getErrorCode();
                     showSnackbar(Constant.getInstance().getMessage(errorCode));
@@ -74,27 +116,13 @@ public class PickRouteFragment extends Fragment
             showSnackbar(throwable.getMessage());
         }
     };
-    /*** Callback Zone ***/
-    Callback<GenerateDao> generateTripCallback = new Callback<GenerateDao>() {
+    private Callback<NormalDao> updateRouteInTripCallback = new Callback<NormalDao>() {
         @Override
-        public void onResponse(@NonNull Call<GenerateDao> call,
-                               @NonNull Response<GenerateDao> response) {
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
-                    String id = response.body().getData();
-                    BicycleRoute.getInstance().setRouteId(id);
-                    BicycleRoute.getInstance().setRouteOrigin(Origin.getInstance());
-                    BicycleRoute.getInstance().setRouteDestination(Destination.getInstance());
-
-                    HttpManager.getInstance().getService()
-                            .addBicycleRoute(
-                                    BicycleRoute.getInstance().getRouteId(),
-                                    BicycleRoute.getInstance().getRoutePath(),
-                                    BicycleRoute.getInstance().getRouteOrigin().getOriginId(),
-                                    BicycleRoute.getInstance().getRouteDestination().getDestinationId()
-                            ).enqueue(addRouteCallback);
-
-
+                    moveToAddMemberActivity();
                 } else {
                     int errorCode = response.body().getErrorCode();
                     showSnackbar(Constant.getInstance().getMessage(errorCode));
@@ -109,7 +137,7 @@ public class PickRouteFragment extends Fragment
         }
 
         @Override
-        public void onFailure(@NonNull Call<GenerateDao> call,
+        public void onFailure(@NonNull Call<NormalDao> call,
                               @NonNull Throwable throwable) {
             showSnackbar(throwable.getMessage());
         }
@@ -135,30 +163,6 @@ public class PickRouteFragment extends Fragment
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-        radioGroupRoute = rootView.findViewById(R.id.rg_route);
-        buttonStart = rootView.findViewById(R.id.button_start);
-        buttonStart.setOnClickListener(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    // Save Instance State Here
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Save Instance State here
-    }
-
     // Restore Instance State Here
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -175,15 +179,51 @@ public class PickRouteFragment extends Fragment
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    // Save Instance State Here
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save Instance State here
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+        radioGroupRoute = rootView.findViewById(R.id.rg_route);
+        buttonNext = rootView.findViewById(R.id.button_next);
+        buttonNext.setOnClickListener(this);
+    }
+
+    @Override
     public void onClick(View view) {
-        if (view == buttonStart) {
+        if (view == buttonNext) {
             HttpManager.getInstance().getService()
                     .generateRouteId()
-                    .enqueue(generateTripCallback);
+                    .enqueue(generateRouteCallback);
         }
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonStart, message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private void moveToMapsActivity() {
+        Intent intent = new Intent(getActivity(), TravelActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    private void moveToAddMemberActivity() {
+        Intent intent = new Intent(getActivity(), AddMemberActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

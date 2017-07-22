@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/member_area"
+        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        tools:layout="@layout/fragment_member"/>
+
+    <FrameLayout
+        android:id="@+id/travel_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

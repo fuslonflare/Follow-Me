@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.view.View;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.Colour;
 import com.example.phuwarin.followme.util.Constant;
 import com.example.phuwarin.followme.util.detail.BicycleRoute;
+import com.example.phuwarin.followme.util.detail.Destination;
 import com.example.phuwarin.followme.util.detail.Origin;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -76,13 +78,52 @@ public class PickRouteActivity extends FragmentActivity
     private static List<Route> route;
     private static Polyline polyline;
     private static int sizeOfRoute;
-
+    private static AppCompatTextView textDistance;
     private String API_KEY;
     private GoogleApiClient mGoogleApiClient;
     private Marker mOriginMarker;
     private AppCompatButton buttonRequestDirection;
     private LatLng origin;
     private LatLng destination;
+    /**
+     * Callback Zone
+     **/
+    private Callback<GenerateDao> generateOriginCallback = new Callback<GenerateDao>() {
+        @Override
+        public void onResponse(@NonNull Call<GenerateDao> call,
+                               @NonNull Response<GenerateDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    String id = response.body().getData();
+                    Origin.getInstance().setOriginId(id);
+
+                    /*HttpManager.getInstance().getService()
+                            .addOrigin(
+                                    Origin.getInstance().getOriginId(),
+                                    Origin.getInstance().getOriginNameEn(),
+                                    Origin.getInstance().getOriginNameTh(),
+                                    Origin.getInstance().getOriginLocation().latitude,
+                                    Origin.getInstance().getOriginLocation().longitude)
+                            .enqueue(addOriginCallback);*/
+                } else {
+                    int errorCode = response.body().getErrorCode();
+                    showSnackbar(Constant.getInstance().getMessage(errorCode));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<GenerateDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
     private Callback<NormalDao> addOriginCallback = new Callback<NormalDao>() {
         @Override
         public void onResponse(@NonNull Call<NormalDao> call,
@@ -107,45 +148,6 @@ public class PickRouteActivity extends FragmentActivity
             showSnackbar(throwable.getMessage());
         }
     };
-    /**
-     * Callback Zone
-     **/
-    private Callback<GenerateDao> generateOriginCallback = new Callback<GenerateDao>() {
-        @Override
-        public void onResponse(@NonNull Call<GenerateDao> call,
-                               @NonNull Response<GenerateDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    String id = response.body().getData();
-                    Origin.getInstance().setOriginId(id);
-
-                    HttpManager.getInstance().getService()
-                            .addOrigin(
-                                    Origin.getInstance().getOriginId(),
-                                    Origin.getInstance().getOriginNameEn(),
-                                    Origin.getInstance().getOriginNameTh(),
-                                    Origin.getInstance().getOriginLocation().latitude,
-                                    Origin.getInstance().getOriginLocation().longitude)
-                            .enqueue(addOriginCallback);
-                } else {
-                    int errorCode = response.body().getErrorCode();
-                    showSnackbar(Constant.getInstance().getMessage(errorCode));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<GenerateDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.getMessage());
-        }
-    };
 
     public static int getSizeOfRoute() {
         return sizeOfRoute;
@@ -161,8 +163,11 @@ public class PickRouteActivity extends FragmentActivity
                     route.get(which).getLegList().get(0).getDirectionPoint(),
                     5, Color.parseColor(Colour.RED.getCode())));
             BicycleRoute.getInstance().setRoutePath(
-                    route.get(which).getOverviewPolyline().getRawPointList()
-            );
+                    route.get(which).getOverviewPolyline().getRawPointList());
+
+            double length = SphericalUtil.computeLength(route.get(which).getLegList().get(0).getDirectionPoint());
+            length = length / 1000.0;
+            textDistance.setText(String.format("%.2f", length) + " km.");
         }
     }
 
@@ -173,6 +178,12 @@ public class PickRouteActivity extends FragmentActivity
 
         initInstance();
         initUi();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdate();
     }
 
     @Override
@@ -189,13 +200,30 @@ public class PickRouteActivity extends FragmentActivity
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOCATION_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showToast("Grant OK");
+                } else {
+                    showToast("Grant Fail");
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode,
+                        permissions,
+                        grantResults);
+        }
+    }
+
     private void initInstance() {
         API_KEY = getResources().getString(R.string.google_maps_key);
         buildGoogleApiClient();
 
-        destination = new LatLng(
-                getIntent().getDoubleExtra("des_lat", 0.0),
-                getIntent().getDoubleExtra("des_lng", 0.0));
+        destination = Destination.getInstance().getDestinationLocation();
     }
 
     protected void buildGoogleApiClient() {
@@ -219,6 +247,8 @@ public class PickRouteActivity extends FragmentActivity
     private void initUi() {
         buttonRequestDirection = findViewById(R.id.button_request_direction);
         buttonRequestDirection.setOnClickListener(this);
+
+        textDistance = findViewById(R.id.text_distance);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -305,8 +335,9 @@ public class PickRouteActivity extends FragmentActivity
                 getLocationAvailability(mGoogleApiClient);
         if (availability.isLocationAvailable()) {
             showToast("Location available");
-            buttonRequestDirection.setVisibility(View.VISIBLE);
-
+            if (buttonRequestDirection.getVisibility() == View.INVISIBLE) {
+                buttonRequestDirection.setVisibility(View.VISIBLE);
+            }
             LocationRequest request = new LocationRequest()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(3000)
@@ -334,12 +365,16 @@ public class PickRouteActivity extends FragmentActivity
     @Override
     public void onLocationChanged(Location location) {
         //showToast(location.getLatitude() + ", " + location.getLongitude());
+        if (!buttonRequestDirection.isEnabled()) {
+            buttonRequestDirection.setEnabled(true);
+        }
 
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
         origin = currentLocation;
         if (buttonRequestDirection.getVisibility() == View.VISIBLE) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
         }
+
 
         if (mOriginMarker != null) {
             mOriginMarker.remove();
@@ -370,36 +405,11 @@ public class PickRouteActivity extends FragmentActivity
         return true;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdate();
-    }
-
     private void stopLocationUpdate() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient,
                 this
         );
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE_LOCATION_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    showToast("Grant OK");
-                } else {
-                    showToast("Grant Fail");
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode,
-                        permissions,
-                        grantResults);
-        }
     }
 
     private void requestDirection() {
@@ -408,7 +418,7 @@ public class PickRouteActivity extends FragmentActivity
         GoogleDirection.withServerKey(API_KEY)
                 .from(origin)
                 .to(destination)
-                .transportMode(TransportMode.DRIVING)
+                .transportMode(TransportMode.WALKING)
                 .alternativeRoute(true)
                 .unit(Unit.METRIC)
                 .execute(this);
@@ -432,9 +442,14 @@ public class PickRouteActivity extends FragmentActivity
                     ContextBuilder.getInstance().getContext(),
                     route.get(0).getLegList().get(0).getDirectionPoint(),
                     5, Color.parseColor(Colour.RED.getCode())));
+            /*BicycleRoute.getInstance().setPath(
+                    PolyUtil.encode(route.get(0).getLegList().get(0).getDirectionPoint()));*/
             BicycleRoute.getInstance().setRoutePath(
-                    route.get(0).getOverviewPolyline().getRawPointList()
-            );
+                    route.get(0).getOverviewPolyline().getRawPointList());
+
+            double length = SphericalUtil.computeLength(route.get(0).getLegList().get(0).getDirectionPoint());
+            length = length / 1000.0;
+            textDistance.setText(String.format("%.2f", length) + " km.");
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(origin);

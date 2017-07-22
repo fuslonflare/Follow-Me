@@ -1,5 +1,7 @@
 package com.example.phuwarin.followme.util.detail;
 
+import java.util.List;
+
 /**
  * Created by Phuwarin on 6/25/2017.
  */
@@ -11,6 +13,7 @@ public class BicycleRoute {
     private String routePath;
     private Origin routeOrigin;
     private Destination routeDestination;
+    private List<Waypoint> waypoints;
 
     private BicycleRoute() {
     }
@@ -52,5 +55,21 @@ public class BicycleRoute {
 
     public void setRouteDestination(Destination routeDestination) {
         this.routeDestination = routeDestination;
+    }
+
+    public List<Waypoint> getWaypoints() {
+        return waypoints;
+    }
+
+    public void setWaypoints(List<Waypoint> waypoints) {
+        this.waypoints = waypoints;
+    }
+
+    public void setBicycleRoute(String id, String path,
+                                Origin origin, Destination dest) {
+        this.routeId = id;
+        this.routePath = path;
+        this.routeOrigin = origin;
+        this.routeDestination = dest;
     }
 }

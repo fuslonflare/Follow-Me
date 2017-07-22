@@ -40,6 +40,14 @@ public class TripDetail {
         this.tripId = tripId;
     }
 
+    public BicycleRoute getTripRoute() {
+        return tripRoute;
+    }
+
+    public void setTripRoute(BicycleRoute tripRoute) {
+        this.tripRoute = tripRoute;
+    }
+
     public List<String> getListMember() {
         return listMember;
     }

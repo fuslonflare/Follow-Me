@@ -39,20 +39,19 @@ import retrofit2.Response;
 public class PickDestinationActivity extends FragmentActivity
         implements OnMapReadyCallback, View.OnClickListener {
 
-    private static GoogleMap mMap;
+    private static GoogleMap sMap;
 
-    private static Marker destinationMarker;
-    private static LatLng destinationLocation;
-    private static String destinationName;
-    private static Place destinationPlace;
+    private static Marker sMarker;
+    private static LatLng sLocation;
+    private static String sName;
+    private static Place sPlace;
 
-    //private List<Address> addresses;
+    private static AppCompatButton sButtonNext;
 
-    private static AppCompatButton buttonNext;
-    /***
-     * Listener Zone
-     * ****/
-    GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
+    /**
+     * Listener
+     */
+    private GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
             String TAG = "GeocoderTAG";
@@ -83,80 +82,52 @@ public class PickDestinationActivity extends FragmentActivity
                 } while (addressLine.length() > 100);
 
                 if (addressLine.length() > 0) {
-                    destinationName = addressLine;
+                    sName = addressLine;
                 }
             }
 
-            if (destinationMarker != null) {
-                destinationMarker.remove();
+            if (sMarker != null) {
+                sMarker.remove();
             }
 
-            destinationMarker = mMap.addMarker(new MarkerOptions().position(latLng));
-            destinationLocation = latLng;
-            buttonNext.setVisibility(View.VISIBLE);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+            sMarker = sMap.addMarker(new MarkerOptions().position(latLng));
+            sLocation = latLng;
+            sButtonNext.setVisibility(View.VISIBLE);
+            sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
     };
-    Callback<NormalDao> addDestinationCallback = new Callback<NormalDao>() {
-        @Override
-        public void onResponse(@NonNull Call<NormalDao> call,
-                               @NonNull Response<NormalDao> response) {
-            if (response.isSuccessful()) {
-                if (response.body().isIsSuccess()) {
-                    Intent intent = new Intent(PickDestinationActivity.this, PickRouteActivity.class);
-                    double lat = destinationLocation.latitude;
-                    double lng = destinationLocation.longitude;
-                    intent.putExtra("des_lat", lat);
-                    intent.putExtra("des_lng", lng);
-                    showToast(lat + ", " + lng);
-                    startActivity(intent);
-                } else {
-                    int errorCode = response.body().getErrorCode();
-                    showSnackbar(Constant.getInstance().getMessage(errorCode));
-                }
-            } else {
-                try {
-                    showSnackbar(response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
-        @Override
-        public void onFailure(@NonNull Call<NormalDao> call,
-                              @NonNull Throwable throwable) {
-            showSnackbar(throwable.getMessage());
-        }
-    };
     /**
-     * Callback Zone
-     **/
-    Callback<GenerateDao> generateDestinationCallback = new Callback<GenerateDao>() {
+     * Callback
+     */
+    private Callback<GenerateDao> generateDestinationCallback = new Callback<GenerateDao>() {
         @Override
         public void onResponse(@NonNull Call<GenerateDao> call,
                                @NonNull Response<GenerateDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
                     String id = response.body().getData();
-                    String nameEn = destinationName, nameTh = destinationName;
-                    LatLng location = destinationLocation;
+                    String nameEn = sName, nameTh = sName;
+                    LatLng location = sLocation;
 
                     if (nameEn != null && nameTh != null && location != null &&
                             nameEn.length() > 0 && nameTh.length() > 0) {
                         saveDestinationLocal(id, nameEn, nameTh, location);
+
+                        Intent intent = new Intent(PickDestinationActivity.this, PickRouteActivity.class);
+                        startActivity(intent);
                     } else {
                         showSnackbar("Destination name = null or length = 0");
                     }
 
-                    HttpManager.getInstance().getService()
+                    /*HttpManager.getInstance().getService()
                             .addDestination(
                                     Destination.getInstance().getDestinationId(),
                                     Destination.getInstance().getDestinationNameEn(),
                                     Destination.getInstance().getDestinationNameTh(),
                                     Destination.getInstance().getDestinationLocation().latitude,
                                     Destination.getInstance().getDestinationLocation().longitude
-                            ).enqueue(addDestinationCallback);
+                            ).enqueue(addDestinationCallback);*/
                 } else {
                     int errorCode = response.body().getErrorCode();
                     showSnackbar(Constant.getInstance().getMessage(errorCode));
@@ -177,23 +148,53 @@ public class PickDestinationActivity extends FragmentActivity
         }
     };
 
-    public static void setMarker(Place place) {
-        destinationPlace = place;
-
-        if (destinationMarker != null) {
-            destinationMarker.remove();
+    private Callback<NormalDao> addDestinationCallback = new Callback<NormalDao>() {
+        @Override
+        public void onResponse(@NonNull Call<NormalDao> call,
+                               @NonNull Response<NormalDao> response) {
+            if (response.isSuccessful()) {
+                if (response.body().isIsSuccess()) {
+                    Intent intent = new Intent(PickDestinationActivity.this, PickRouteActivity.class);
+                    startActivity(intent);
+                } else {
+                    int errorCode = response.body().getErrorCode();
+                    showSnackbar(Constant.getInstance().getMessage(errorCode));
+                }
+            } else {
+                try {
+                    showSnackbar(response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        destinationLocation = destinationPlace.getLatLng();
-        destinationName = destinationPlace.getName().toString();
-        MarkerOptions marker = new MarkerOptions().position(destinationLocation)
-                .title(destinationName);
+        @Override
+        public void onFailure(@NonNull Call<NormalDao> call,
+                              @NonNull Throwable throwable) {
+            showSnackbar(throwable.getMessage());
+        }
+    };
 
-        destinationMarker = mMap.addMarker(marker);
-        buttonNext.setVisibility(View.VISIBLE);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destinationLocation, 16));
+    public static void setMarker(Place place) {
+        sPlace = place;
+
+        if (sMarker != null) {
+            sMarker.remove();
+        }
+
+        sLocation = sPlace.getLatLng();
+        sName = sPlace.getName().toString();
+        MarkerOptions marker = new MarkerOptions().position(sLocation)
+                .title(sName);
+
+        sMarker = sMap.addMarker(marker);
+        sButtonNext.setVisibility(View.VISIBLE);
+        sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sLocation, 16));
     }
 
+    /**
+     * Overridden method */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,40 +217,18 @@ public class PickDestinationActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
     }
 
-    private void initUi() {
-        buttonNext = findViewById(R.id.button_next);
-        buttonNext.setOnClickListener(this);
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         showToast("Map Ready");
 
-        mMap = googleMap;
-        mMap.setOnMapClickListener(onMapClickListener);
-    }
-
-    private void showToast(CharSequence message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG).show();
+        sMap = googleMap;
+        sMap.setOnMapClickListener(onMapClickListener);
     }
 
     @Override
     public void onClick(View view) {
-        if (view == buttonNext) {
-            if (destinationLocation != null) {
+        if (view == sButtonNext) {
+            if (sLocation != null) {
                 HttpManager.getInstance().getService()
                         .generateDestinationId()
                         .enqueue(generateDestinationCallback);
@@ -257,6 +236,22 @@ public class PickDestinationActivity extends FragmentActivity
                 showToast("Don't forget to choose destination");
             }
         }
+    }
+
+    /**
+     * Method
+     */
+    private void initUi() {
+        sButtonNext = findViewById(R.id.button_next);
+        sButtonNext.setOnClickListener(this);
+    }
+
+    private void showToast(CharSequence message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showSnackbar(CharSequence message) {
+        Snackbar.make(sButtonNext, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void saveDestinationLocal(String id,

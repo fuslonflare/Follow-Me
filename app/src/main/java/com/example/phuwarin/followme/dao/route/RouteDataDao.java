@@ -4,51 +4,63 @@ package com.example.phuwarin.followme.dao.route;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class RouteDataDao {
 
-    @SerializedName("route_id")
+    @SerializedName("id")
     @Expose
-    private String routeId;
-    @SerializedName("route_path")
+    private String id;
+    @SerializedName("path")
     @Expose
-    private String routePath;
-    @SerializedName("trip_origin")
+    private String path;
+    @SerializedName("origin")
     @Expose
-    private TripOriginDao tripOriginDao;
-    @SerializedName("trip_destination")
+    private RouteOriginDao origin;
+    @SerializedName("destination")
     @Expose
-    private TripDestinationDao tripDestinationDao;
+    private RouteDestinationDao destination;
+    @SerializedName("waypoints")
+    @Expose
+    private List<RouteWaypointsDao> waypoints;
 
-    public String getRouteId() {
-        return routeId;
+    public String getId() {
+        return id;
     }
 
-    public void setRouteId(String routeId) {
-        this.routeId = routeId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getRoutePath() {
-        return routePath;
+    public String getPath() {
+        return path;
     }
 
-    public void setRoutePath(String routePath) {
-        this.routePath = routePath;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public TripOriginDao getTripOriginDao() {
-        return tripOriginDao;
+    public RouteOriginDao getOrigin() {
+        return origin;
     }
 
-    public void setTripOriginDao(TripOriginDao tripOriginDao) {
-        this.tripOriginDao = tripOriginDao;
+    public void setOrigin(RouteOriginDao origin) {
+        this.origin = origin;
     }
 
-    public TripDestinationDao getTripDestinationDao() {
-        return tripDestinationDao;
+    public RouteDestinationDao getDestination() {
+        return destination;
     }
 
-    public void setTripDestinationDao(TripDestinationDao tripDestinationDao) {
-        this.tripDestinationDao = tripDestinationDao;
+    public void setDestination(RouteDestinationDao destination) {
+        this.destination = destination;
     }
 
+    public List<RouteWaypointsDao> getWaypoints() {
+        return waypoints;
+    }
+
+    public void setWaypoints(List<RouteWaypointsDao> waypoints) {
+        this.waypoints = waypoints;
+    }
 }

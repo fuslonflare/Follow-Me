@@ -22,9 +22,10 @@ import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragmen
 
 public class PickDestinationFragment extends Fragment {
 
-    /***
-     *** Listener Zone ******/
-    PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
+    /**
+     * Listener
+     */
+    private PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
         @Override
         public void onPlaceSelected(Place place) {
             showToast(place.getName().toString());
@@ -37,6 +38,8 @@ public class PickDestinationFragment extends Fragment {
         }
     };
 
+    /**
+     * Default Constructor */
     public PickDestinationFragment() {
         super();
     }
@@ -48,6 +51,8 @@ public class PickDestinationFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Overridden Method */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +73,15 @@ public class PickDestinationFragment extends Fragment {
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-
-    }
-
+    /**
+     * Restore Instance State Here
+     **/
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore Instance State here
+        }
     }
 
     /**
@@ -87,15 +93,17 @@ public class PickDestinationFragment extends Fragment {
         // Save Instance State here
     }
 
-    /**
-     * Restore Instance State Here
-     **/
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore Instance State here
-        }
+    public void onStop() {
+        super.onStop();
+    }
+
+    /**
+     * Normal Method
+     */
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+
     }
 
     private void showToast(String message) {

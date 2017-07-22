@@ -61,14 +61,14 @@
             android:textColor="@color/white" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button_next"
+            android:id="@+id/button_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="@drawable/selector_button_next"
-            android:text="@string/label_button_next" />
+            android:text="Start"/>
     </LinearLayout>
 
 </LinearLayout>

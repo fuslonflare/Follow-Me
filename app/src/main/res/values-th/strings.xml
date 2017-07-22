@@ -11,11 +11,29 @@
     <string name="error_message_350">เกิดข้อผิดพลาดในการดึงข้อมูลจากฐานข้อมูล</string>
     <string name="error_message_351">พารามิเตอร์ห้ามเป็นค่าว่าง</string>
     <string name="error_message_352">ไม่พบข้อมูลผู้ใช้ %1$s ตรวจสอบ ID ที่กรอกอีกทีนึง</string>
+    <string name="error_message_4869">ข้อผิดพลาด 4869: นักสืบขั้นทดลอง</string>
 
     <string name="hint_enter_member_id">กรอก ID ของผู้ร่วมเดินทาง</string>
 
     <string name="label_button_cancel">ยกเลิก</string>
     <string name="label_button_next">ต่อไป</string>
     <string name="label_button_request_route">ร้องขอเส้นทาง</string>
-    <string name="error_message_4869">ข้อผิดพลาด 4869: นักสืบขั้นทดลอง</string>
+
+    <string name="waypoint_success">เพิ่มจุดแวะเรียบร้อย</string>
+    <string name="waypoint_zero">คุณยังไม่ได้กำหนดจุดแวะเลยนะ</string>
+    <string name="text_continue">ดำเนินการต่อ</string>
+    <string name="text_start_trip">เริ่มต้นการเดินทาง !</string>
+    <string name="text_check_in_successful">จัดเก็บสถานที่สนใจเรียบร้อยแล้ว</string>
+    <string name="message_finish_trip">คุณต้องการจะสิ้นสุดการเดินทางหรือไม่</string>
+    <string name="text_ok">อ่าฮะ</string>
+    <string name="text_cancel">ไม่อ่ะ...เรากดผิด</string>
+    <string name="text_finish_trip_successful">สิ้นสุดการเดินทาง</string>
+    <string name="lorem_ipsum">Lorem Ipsum คือ เนื้อหาจำลองแบบเรียบ ๆ ที่ใช้กันในธุรกิจงานพิมพ์หรืองานเรียงพิมพ์ มันได้กลายมาเป็นเนื้อหาจำลองมาตรฐานของธุรกิจดังกล่าวมาตั้งแต่ศตวรรษที่ ๑๖ เมื่อเครื่องพิมพ์โนเนมเครื่องหนึ่งนำรางตัวพิมพ์มาสลับสับตำแหน่งตัวอักษรเพื่อทำหนังสือตัวอย่าง Lorem Ipsum อยู่ยงคงกระพันมาไม่ใช่แค่เพียง ๕ ศตวรรษ แต่อยู่มาจนถึงยุคที่พลิกโฉมเข้าสู่งานเรียงพิมพ์ด้วยวิธีทางอิเล็กทรอนิกส์ และยังคงสภาพเดิมไว้อย่างไม่มีการเปลี่ยนแปลง มันได้รับความนิยมมากขึ้นในยุค พ.ศ.๒๕๐๓ เมื่อแผ่น Letraset วางจำหน่ายโดยมีข้อความบนนั้นเป็น Lorem Ipsum และล่าสุดกว่านั้น คือเมื่อซอฟต์แวร์การทำสื่อสิ่งพิมพ์ (Desktop Publishing) อย่าง Aldus PageMaker ได้รวมเอา Lorem Ipsum เวอร์ชั่นต่าง ๆ เข้าไว้ในซอฟต์แวร์ด้วย</string>
+
+    <string name="text_hint_feedback">แสดงความคิดเห็น</string>
+    <string name="text_button_submit">ส่งข้อมูล</string>
+    <string name="text_button_skip">ข้าม</string>
+    <string name="text_send_feedback_success">ขอบคุณสำหรับคำติชมฮะ (;</string>
+    <string name="text_send_feedback_fail">มีบางอย่างผิดพลาด ข้ามไปเลยก็ได้ ):</string>
+    <string name="label_button_create">สร้างทริป</string>
 </resources>

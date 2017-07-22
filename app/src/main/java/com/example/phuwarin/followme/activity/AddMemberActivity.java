@@ -19,4 +19,9 @@ public class AddMemberActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

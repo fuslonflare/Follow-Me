@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.dao.NormalDao;
-import com.example.phuwarin.followme.fragment.WaitToAddMemberFragment;
+import com.example.phuwarin.followme.fragment.WaitingFragment;
 import com.example.phuwarin.followme.util.Constant;
 
 import java.io.IOException;
@@ -20,6 +20,7 @@ public class WaitingActivity extends AppCompatActivity {
 
     private static final String TAG = "WaitingActivityTAG";
     private static final String TAG2 = "LifeCycleTAG";
+
     /**
      * Callback Zone **/
     Callback<NormalDao> deleteUserCallback = new Callback<NormalDao>() {
@@ -54,7 +55,7 @@ public class WaitingActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.waiting_area, WaitToAddMemberFragment.newInstance())
+                    .add(R.id.waiting_area, WaitingFragment.newInstance())
                     .commit();
         }
     }

@@ -1,9 +1,14 @@
 package com.example.phuwarin.followme.manager.http;
 
+import com.example.phuwarin.followme.dao.CheckStatusTripDao;
+import com.example.phuwarin.followme.dao.FriendLocationDao;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.dao.position.PositionDao;
+import com.example.phuwarin.followme.dao.route.RouteDao;
 import com.example.phuwarin.followme.dao.trip.GenerateDao;
 import com.example.phuwarin.followme.dao.trip.JoinTripDao;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -104,5 +109,67 @@ public interface ApiService {
             @Field("route_path") String path,
             @Field("trip_origin") String originId,
             @Field("trip_dest") String destinationId
+    );
+
+    @FormUrlEncoded
+    @POST("update_route_in_trip.php")
+    Call<NormalDao> updateRouteInTrip(
+            @Field("route_id") String routeId,
+            @Field("trip_id") String tripId
+    );
+
+
+    @FormUrlEncoded
+    @POST("update_location_user.php")
+    Call<NormalDao> updateLocation(
+            @Field("user_id") String userId,
+            @Field("user_lat") double lat,
+            @Field("user_lng") double lng
+    );
+
+    @FormUrlEncoded
+    @POST("load_location_friends.php")
+    Call<FriendLocationDao> loadFriendsLocation(
+            @Field("trip_id") String tripId
+    );
+
+    @FormUrlEncoded
+    @POST("master-create-trip.php")
+    Call<NormalDao> createTrip(
+            @Field("request") JSONObject mainRequest
+    );
+
+    @FormUrlEncoded
+    @POST("get_route_detail_from_trip.php")
+    Call<RouteDao> loadRouteDetail(
+            @Field("trip_id") String trip_id
+    );
+
+    @FormUrlEncoded
+    @POST("api-check-in.php")
+    Call<NormalDao> insertCheckInPlace(
+            @Field("user_id") String userId,
+            @Field("lat") double lat,
+            @Field("lng") double lng
+    );
+
+    @FormUrlEncoded
+    @POST("api-finish-trip.php")
+    Call<NormalDao> finishTrip(
+            @Field("trip_id") String tripId
+    );
+
+    @FormUrlEncoded
+    @POST("api-is-trip-finish.php")
+    Call<CheckStatusTripDao> checkFinishTrip(
+            @Field("trip_id") String tripId
+    );
+
+    @FormUrlEncoded
+    @POST("keep_feedback.php")
+    Call<NormalDao> sendFeedback(
+            @Field("user_id") String userId,
+            @Field("trip_id") String tripId,
+            @Field("feedback") String message
     );
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_bg_window"
-    android:gravity="center"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/color_bg_window"
+              android:gravity="center"
+              android:orientation="vertical">
 
     <RadioGroup
         android:id="@+id/rg_route"
@@ -19,32 +19,32 @@
             android:buttonTint="@color/selector_radio_button"
             android:checked="true"
             android:text="เส้นทางที่ 1"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
 
         <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/selector_radio_button"
             android:text="เส้นทางที่ 2"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
 
         <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/selector_radio_button"
             android:text="เส้นทางที่ 3"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
 
     </RadioGroup>
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/button_start"
+        android:id="@+id/button_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_margin="10dp"
-        android:background="@color/bg_button_start_normal"
-        android:text="Start"
-        android:textColor="@color/white" />
+        android:background="@drawable/selector_button_next"
+        android:text="@string/label_button_next"
+        android:textColor="@color/black"/>
 
 </LinearLayout>

@@ -4,31 +4,37 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.util.AttributeSet;
 
-import com.inthecheesefactory.thecheeselibrary.R;
-import com.inthecheesefactory.thecheeselibrary.view.BaseCustomViewGroup;
-import com.inthecheesefactory.thecheeselibrary.view.state.BundleSavedState;
+import com.example.phuwarin.followme.view.state.BundleSavedState;
 
 /**
- * Created by nuuneoi on 11/16/2014.
+ * Created by Phuwarin on 7/18/2017.
  */
+
 public class CustomViewGroupTemplate extends BaseCustomViewGroup {
 
-    public CustomViewGroupTemplate(Context context) {
+    public CustomViewGroupTemplate(@NonNull Context context) {
         super(context);
         initInflate();
         initInstances();
     }
 
-    public CustomViewGroupTemplate(Context context, AttributeSet attrs) {
+    public CustomViewGroupTemplate(@NonNull Context context,
+                                   @Nullable AttributeSet attrs) {
         super(context, attrs);
         initInflate();
         initInstances();
         initWithAttrs(attrs, 0, 0);
     }
 
-    public CustomViewGroupTemplate(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomViewGroupTemplate(@NonNull Context context,
+                                   @Nullable AttributeSet attrs,
+                                   @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initInflate();
         initInstances();
@@ -36,7 +42,10 @@ public class CustomViewGroupTemplate extends BaseCustomViewGroup {
     }
 
     @TargetApi(21)
-    public CustomViewGroupTemplate(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CustomViewGroupTemplate(@NonNull Context context,
+                                   @Nullable AttributeSet attrs,
+                                   @AttrRes int defStyleAttr,
+                                   @StyleRes int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initInflate();
         initInstances();
@@ -44,7 +53,8 @@ public class CustomViewGroupTemplate extends BaseCustomViewGroup {
     }
 
     private void initInflate() {
-        inflate(getContext(), R.layout.sample_layout, this);
+        // inflate here
+        // inflate(getContext(), R.layout.sample_layout, this);
     }
 
     private void initInstances() {
@@ -57,9 +67,7 @@ public class CustomViewGroupTemplate extends BaseCustomViewGroup {
                 attrs,
                 R.styleable.StyleableName,
                 defStyleAttr, defStyleRes);
-
         try {
-
         } finally {
             a.recycle();
         }
@@ -86,5 +94,4 @@ public class CustomViewGroupTemplate extends BaseCustomViewGroup {
         Bundle bundle = ss.getBundle();
         // Restore State from bundle here
     }
-
 }

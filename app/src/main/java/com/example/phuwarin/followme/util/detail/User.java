@@ -53,4 +53,10 @@ public class User {
     public void setPosition(String position) {
         this.position = position;
     }
+
+    public void setUser(String id, String name, String position) {
+        this.id = id;
+        this.name = name;
+        this.position = position;
+    }
 }

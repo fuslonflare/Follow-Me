@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.content_area, MainFragment.newInstance(), "MainFragment")
                     .commit();
         }
+
     }
 
     public void printHashKey() {

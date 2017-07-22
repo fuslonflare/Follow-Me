@@ -56,4 +56,12 @@ public class Origin {
     public void setOriginLocation(LatLng originLocation) {
         this.originLocation = originLocation;
     }
+
+    public void setOrigin(String id, String nameEn, String nameTh,
+                          double lat, double lng) {
+        this.originId = id;
+        this.originNameEn = nameEn;
+        this.originNameTh = nameTh;
+        this.originLocation = new LatLng(lat, lng);
+    }
 }

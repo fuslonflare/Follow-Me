@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.activity.AddMemberActivity;
+import com.example.phuwarin.followme.activity.PickDestinationActivity;
 import com.example.phuwarin.followme.activity.WaitingActivity;
 import com.example.phuwarin.followme.dao.position.PositionDao;
 import com.example.phuwarin.followme.manager.HttpManager;
@@ -33,10 +33,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private static AppCompatButton buttonLeader;
     private static AppCompatButton buttonFollower;
+
     /**
      * Callback
      **/
-
     Callback<PositionDao> positionDaoCallback = new Callback<PositionDao>() {
         @Override
         public void onResponse(@NonNull Call<PositionDao> call,
@@ -67,6 +67,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             showSnackbar(throwable.getMessage());
         }
     };
+
     private Class destination;
 
     public MainFragment() {
@@ -95,12 +96,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-        buttonLeader = rootView.findViewById(R.id.button_leader);
-        buttonFollower = rootView.findViewById(R.id.button_follower);
-        buttonLeader.setOnClickListener(this);
-        buttonFollower.setOnClickListener(this);
+    /**
+     * Restore Instance State Here
+     **/
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore Instance State here
+        }
     }
 
     @Override
@@ -111,11 +115,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         positionCall.enqueue(positionDaoCallback);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     /** Save Instance State Here **/
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -123,18 +122,22 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         // Save Instance State here
     }
 
-    /** Restore Instance State Here **/
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore Instance State here
-        }
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+        buttonLeader = rootView.findViewById(R.id.button_leader);
+        buttonFollower = rootView.findViewById(R.id.button_follower);
+        buttonLeader.setOnClickListener(this);
+        buttonFollower.setOnClickListener(this);
     }
 
     @Override
@@ -144,7 +147,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 User.getInstance().setPosition(
                         PositionCollection.getInstance().getPositionList().get(1).getId()
                 );
-                destination = AddMemberActivity.class;
+
+                destination = PickDestinationActivity.class;
             }
             if (view == buttonFollower) {
                 User.getInstance().setPosition(

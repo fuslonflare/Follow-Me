@@ -55,4 +55,12 @@ public class Destination {
     public void setDestinationLocation(LatLng destinationLocation) {
         this.destinationLocation = destinationLocation;
     }
+
+    public void setDestination(String id, String nameEn, String nameTh,
+                               double lat, double lng) {
+        this.destinationId = id;
+        this.destinationNameEn = nameEn;
+        this.destinationNameTh = nameTh;
+        this.destinationLocation = new LatLng(lat, lng);
+    }
 }

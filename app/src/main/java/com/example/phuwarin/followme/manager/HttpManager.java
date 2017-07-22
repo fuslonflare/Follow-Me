@@ -12,6 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpManager {
 
+    private static final String URL1 = "https://webserv.kmitl.ac.th/parietallobe/";
+    private static final String URL2 = "http://bicyclefollowme.esy.es/";
+
     private static HttpManager instance;
     private Context mContext;
     private ApiService service;
@@ -20,7 +23,7 @@ public class HttpManager {
         mContext = ContextBuilder.getInstance().getContext();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://webserv.kmitl.ac.th/parietallobe/")
+                .baseUrl(URL2)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(ApiService.class);

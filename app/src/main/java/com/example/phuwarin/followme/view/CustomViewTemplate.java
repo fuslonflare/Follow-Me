@@ -5,35 +5,42 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.inthecheesefactory.thecheeselibrary.view.state.BundleSavedState;
+import com.example.phuwarin.followme.view.state.BundleSavedState;
 
 /**
- * Created by nuuneoi on 11/16/2014.
+ * Created by Phuwarin on 7/18/2017.
  */
-public class CustomViewTemplate extends View {
 
+public class CustomViewTemplate extends View {
     public CustomViewTemplate(Context context) {
         super(context);
         init();
     }
 
-    public CustomViewTemplate(Context context, AttributeSet attrs) {
+    public CustomViewTemplate(Context context,
+                              @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
         initWithAttrs(attrs, 0, 0);
     }
 
-    public CustomViewTemplate(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomViewTemplate(Context context,
+                              @Nullable AttributeSet attrs,
+                              int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
         initWithAttrs(attrs, defStyleAttr, 0);
     }
 
     @TargetApi(21)
-    public CustomViewTemplate(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CustomViewTemplate(Context context,
+                              @Nullable AttributeSet attrs,
+                              int defStyleAttr,
+                              int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
         initWithAttrs(attrs, defStyleAttr, defStyleRes);
@@ -49,9 +56,7 @@ public class CustomViewTemplate extends View {
                 attrs,
                 R.styleable.StyleableName,
                 defStyleAttr, defStyleRes);
-
         try {
-
         } finally {
             a.recycle();
         }
@@ -83,5 +88,4 @@ public class CustomViewTemplate extends View {
         Bundle bundle = ss.getBundle();
         // Restore State from bundle here
     }
-
 }

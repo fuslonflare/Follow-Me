@@ -10,11 +10,10 @@ import android.util.Log;
 import android.widget.ImageButton;
 
 import com.example.phuwarin.followme.R;
-import com.inthecheesefactory.thecheeselibrary.view.BaseCustomViewGroup;
-import com.inthecheesefactory.thecheeselibrary.view.state.BundleSavedState;
+import com.example.phuwarin.followme.view.state.BundleSavedState;
 
 /**
- * Created by nuuneoi on 11/16/2014.
+ * Created by Phuwarin on 7/18/2017.
  */
 public class AddMemberField extends BaseCustomViewGroup {
 
@@ -55,8 +54,8 @@ public class AddMemberField extends BaseCustomViewGroup {
 
     private void initInstances() {
         // findViewById here
-        editText = (AppCompatEditText) findViewById(R.id.edit_member_id);
-        buttonQrCode = (ImageButton) findViewById(R.id.button_qr_code);
+        editText = findViewById(R.id.edit_member_id);
+        buttonQrCode = findViewById(R.id.button_qr_code);
 
         //buttonQrCode.setOnClickListener(this);
     }
@@ -97,13 +96,13 @@ public class AddMemberField extends BaseCustomViewGroup {
         // Restore State from bundle here
     }
 
+    public String getMemberId() {
+        return editText.getText().toString();
+    }
+
     public void setMemberId(String scannedId) {
         Log.d("QrCodeTAG", scannedId);
         editText.setText(scannedId);
-    }
-
-    public String getMemberId() {
-        return editText.getText().toString();
     }
 
     // TODO: Add QR code feature

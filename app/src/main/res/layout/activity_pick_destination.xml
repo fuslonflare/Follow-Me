@@ -5,54 +5,40 @@
               android:orientation="vertical"
               tools:context="com.example.phuwarin.followme.activity.PickDestinationActivity">
 
-    <ScrollView
+    <fragment
+        android:id="@+id/member_area"
+        android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="50dp"
+        tools:layout="@layout/fragment_member"/>
 
-        <LinearLayout
+    <FrameLayout
+        android:id="@+id/pick_destination_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/map_destination"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/button_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/bg_button_next_sparse_normal"
+            android:text="@string/label_button_next"
+            android:visibility="gone"/>
 
-            <fragment
-                android:id="@+id/member_area"
-                android:name="com.example.phuwarin.followme.fragment.MemberAreaFragment"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                tools:layout="@layout/fragment_member"/>
-
-            <FrameLayout
-                android:id="@+id/pick_destination_area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <fragment
-                    android:id="@+id/map_destination"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/button_next"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/bg_button_next_sparse_normal"
-                    android:text="@string/label_button_next"
-                    android:visibility="gone"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </RelativeLayout>
 
 </LinearLayout>

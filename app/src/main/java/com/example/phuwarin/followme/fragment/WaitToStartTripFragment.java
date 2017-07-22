@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.phuwarin.followme.R;
-import com.example.phuwarin.followme.activity.MapsActivity;
+import com.example.phuwarin.followme.activity.TravelActivity;
 import com.example.phuwarin.followme.dao.NormalDao;
 import com.example.phuwarin.followme.manager.HttpManager;
 import com.example.phuwarin.followme.util.Constant;
+import com.example.phuwarin.followme.util.detail.BicycleRoute;
 import com.example.phuwarin.followme.util.detail.TripDetail;
 
 import java.io.IOException;
@@ -32,11 +34,13 @@ import retrofit2.Response;
 
 public class WaitToStartTripFragment extends Fragment {
 
-    private final String TAG = WaitToStartTripFragment.this.getClass().getSimpleName() + "TAG";
-    private final int DURATION = 60;
+    private static final String TAG = "WaitToStartTripTAG";
+    private static final String TAG2 = "RetrofitTAG";
+    private static final int DURATION = 120;
 
     private ProgressBar progressBar;
     private CountDownTimer timer;
+    private AppCompatTextView textCounter;
 
     private Call<NormalDao> getRouteFromTripCall;
     /**
@@ -48,16 +52,19 @@ public class WaitToStartTripFragment extends Fragment {
                                @NonNull Response<NormalDao> response) {
             if (response.isSuccessful()) {
                 if (response.body().isIsSuccess()) {
-                    Log.i(TAG, response.body().getData() == null ? "null" :
+                    Log.i(TAG2, response.body().getData() == null ? "null" :
                             response.body().getData());
 
                     if (response.body().getData() != null) {
+                        String routeId = response.body().getData();
+                        BicycleRoute.getInstance().setRouteId(routeId);
+
                         if (!getRouteFromTripCall.clone().isCanceled()) {
                             getRouteFromTripCall.clone().cancel();
                         }
 
                         getActivity().finish();
-                        Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        Intent intent = new Intent(getActivity(), TravelActivity.class);
                         startActivity(intent);
                     } else {
                         if (!getRouteFromTripCall.clone().isCanceled()) {
@@ -103,7 +110,7 @@ public class WaitToStartTripFragment extends Fragment {
         timer = new CountDownTimer(DURATION * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                textCounter.setText(String.valueOf(millisUntilFinished / 1000));
             }
 
             @Override
@@ -122,9 +129,15 @@ public class WaitToStartTripFragment extends Fragment {
         return rootView;
     }
 
-    private void initInstances(View rootView) {
-        // Init 'View' instance(s) with rootView.findViewById here
-        progressBar = rootView.findViewById(R.id.progress_bar);
+    /**
+     * Restore Instance State Here
+     **/
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore Instance State here
+        }
     }
 
     @Override
@@ -133,14 +146,6 @@ public class WaitToStartTripFragment extends Fragment {
 
         timer.start();
         getRouteFromTripCall.clone().enqueue(loadRouteTripCallback);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        getRouteFromTripCall.clone().cancel();
-
-        timer.cancel();
     }
 
     /**
@@ -152,15 +157,18 @@ public class WaitToStartTripFragment extends Fragment {
         // Save Instance State here
     }
 
-    /**
-     * Restore Instance State Here
-     **/
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore Instance State here
-        }
+    public void onStop() {
+        super.onStop();
+        getRouteFromTripCall.clone().cancel();
+
+        timer.cancel();
+    }
+
+    private void initInstances(View rootView) {
+        // Init 'View' instance(s) with rootView.findViewById here
+        progressBar = rootView.findViewById(R.id.progress_bar);
+        textCounter = rootView.findViewById(R.id.text_countdown);
     }
 
     private void showSnackbar(CharSequence message) {
