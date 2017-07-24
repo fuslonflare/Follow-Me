@@ -5,7 +5,7 @@
     <string name="google_place_key" translatable="false">AIzaSyAmsFgR4TjydhlRTP05t0_Dre3ZA29BIqY</string>
 
     <string name="label_button_leader" translatable="false">Leader Mode</string>
-    <string name="label_button_follower" translatable="false">Follower Mode</string>
+    <string name="label_button_folTravelFraglower" translatable="false">Follower Mode</string>
     <string name="label_button_next">Next</string>
     <string name="label_button_cancel">Cancel</string>
     <string name="label_button_request_route">Request Route</string>
@@ -55,6 +55,10 @@
     <string name="text_button_skip">Skip</string>
     <string name="text_send_feedback_success">Send feedback successful\nThank you. ;)</string>
     <string name="text_send_feedback_fail">Something went wrong :(</string>
+
+    <string name="alert_message_finish_trip">Are you sure you want to finish this trip?</string>
+    <string name="alert_ok_finish_trip">Yes</string>
+    <string name="alert_cancel_finish_trip">No</string>
 
     <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
 </resources>

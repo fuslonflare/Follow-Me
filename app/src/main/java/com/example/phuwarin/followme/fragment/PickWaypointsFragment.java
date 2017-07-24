@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phuwarin.followme.R;
@@ -269,6 +270,17 @@ public class PickWaypointsFragment extends Fragment
         autocomplete.setOnPlaceSelectedListener(placeSelectionListener);
     }
 
+    private void showSnackbar(CharSequence message) {
+        Snackbar snackbar = Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
+    }
+
     @Override
     public void onClick(View view) {
         if (view == buttonNext) {
@@ -288,10 +300,6 @@ public class PickWaypointsFragment extends Fragment
                 generateTripId();
             }
         }
-    }
-
-    private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonNext, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void drawRoutePath(String path) {
@@ -370,11 +378,13 @@ public class PickWaypointsFragment extends Fragment
     private void keepWaypointsToLocal() {
         int i = 1;
         listWaypoints = new ArrayList<>();
-        for (Marker marker : waypoints) {
-            listWaypoints.add(new Waypoint(marker.getTitle(), marker.getTitle(),
-                    marker.getPosition().latitude, marker.getPosition().longitude, i++));
+        if (waypoints != null && waypoints.size() != 0) {
+            for (Marker marker : waypoints) {
+                listWaypoints.add(new Waypoint(marker.getTitle(), marker.getTitle(),
+                        marker.getPosition().latitude, marker.getPosition().longitude, i++));
+            }
+            BicycleRoute.getInstance().setWaypoints(listWaypoints);
         }
-        BicycleRoute.getInstance().setWaypoints(listWaypoints);
     }
 
 

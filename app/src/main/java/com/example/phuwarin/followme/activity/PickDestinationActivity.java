@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
@@ -251,7 +252,14 @@ public class PickDestinationActivity extends FragmentActivity
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(sButtonNext, message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(sButtonNext, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 
     private void saveDestinationLocal(String id,

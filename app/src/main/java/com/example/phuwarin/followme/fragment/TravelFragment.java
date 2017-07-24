@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.util.DirectionConverter;
@@ -524,7 +525,7 @@ public class TravelFragment extends Fragment
         if (meMarker != null) {
             meMarker.remove();
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
         meMarker = mMap.addMarker(new MarkerOptions()
                 .position(currentLocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location)));
@@ -534,7 +535,9 @@ public class TravelFragment extends Fragment
                         location.getLatitude(), location.getLongitude());
 
         callServer();
-        checkNearWaypoints(currentLocation, waypoints);
+        if (waypoints != null && waypoints.size() != 0) {
+            checkNearWaypoints(currentLocation, waypoints);
+        }
     }
 
     /**
@@ -567,7 +570,14 @@ public class TravelFragment extends Fragment
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonFinish, message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(buttonFinish, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 
     private void drawPolyline(String path) {
@@ -605,9 +615,9 @@ public class TravelFragment extends Fragment
     private void showDialogWhenFinish() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
-        builder.setMessage("ต้องการจะสิ้นสุดการเดินทางจริงเหรอ");
-        builder.setPositiveButton("จริง", onOkClickListener);
-        builder.setNegativeButton("ไม่อ่ะ กดผิด", onCancelClickListener);
+        builder.setMessage(getString(R.string.alert_message_finish_trip));
+        builder.setPositiveButton(getString(R.string.alert_ok_finish_trip), onOkClickListener);
+        builder.setNegativeButton(getString(R.string.alert_cancel_finish_trip), onCancelClickListener);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -619,11 +629,14 @@ public class TravelFragment extends Fragment
     }
 
     private void markWaypoint(List<Waypoint> waypoints) {
-        for (Waypoint aWaypoint : waypoints) {
-            Marker m = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(aWaypoint.getLat(), aWaypoint.getLng()))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_waypoint)));
-            markWaypoints.add(m);
+        if (waypoints != null && waypoints.size() != 0) {
+            for (Waypoint aWaypoint : waypoints) {
+                Marker m = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(aWaypoint.getLat(), aWaypoint.getLng()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_waypoint)));
+                markWaypoints.add(m);
+
+            }
         }
     }
 

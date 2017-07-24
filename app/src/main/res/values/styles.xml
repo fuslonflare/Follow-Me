@@ -16,5 +16,4 @@
         <item name="android:padding">@dimen/default_padding_button</item>
         <item name="android:layout_margin">@dimen/default_padding_button</item>
     </style>
-
 </resources>

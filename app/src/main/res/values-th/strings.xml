@@ -36,4 +36,7 @@
     <string name="text_send_feedback_success">ขอบคุณสำหรับคำติชมฮะ (;</string>
     <string name="text_send_feedback_fail">มีบางอย่างผิดพลาด ข้ามไปเลยก็ได้ ):</string>
     <string name="label_button_create">สร้างทริป</string>
+    <string name="alert_cancel_finish_trip">ไม่</string>
+    <string name="alert_message_finish_trip">คุณต้องการสิ้นสุดการเดินทางหรือไม่</string>
+    <string name="alert_ok_finish_trip">ใช่</string>
 </resources>

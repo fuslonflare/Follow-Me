@@ -15,8 +15,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.text.Html;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -266,9 +266,14 @@ public class PickRouteActivity extends FragmentActivity
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(buttonRequestDirection,
-                Html.fromHtml("<font color=\"#ffffff\">" + message + "</font>"),
-                Snackbar.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(buttonRequestDirection, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 
     @Override

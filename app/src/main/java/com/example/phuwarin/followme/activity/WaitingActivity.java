@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.dao.NormalDao;
@@ -70,6 +72,13 @@ public class WaitingActivity extends AppCompatActivity {
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(findViewById(R.id.waiting_area), message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.waiting_area), message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 }

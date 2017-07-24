@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.phuwarin.followme.R;
@@ -254,7 +255,14 @@ public class WaitingFragment extends Fragment {
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(imageQrCode, message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(imageQrCode, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 
     private void showToast(CharSequence message) {

@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.PickDestinationActivity;
@@ -162,8 +163,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(buttonFollower, message, Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar snackbar = Snackbar.make(buttonFollower, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 }
 

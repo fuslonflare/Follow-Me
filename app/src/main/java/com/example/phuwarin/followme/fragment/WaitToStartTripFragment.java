@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.activity.TravelActivity;
@@ -172,7 +173,13 @@ public class WaitToStartTripFragment extends Fragment {
     }
 
     private void showSnackbar(CharSequence message) {
-        Snackbar.make(progressBar, message, Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar snackbar = Snackbar.make(progressBar, message, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+
+        int snackbarTextId = android.support.design.R.id.snackbar_text;
+        TextView textView = snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(R.color.white));
+
+        snackbar.show();
     }
 }
