@@ -41,9 +41,9 @@ repositories {
 
 ext.supportLibraryVersion = '26.0.0-alpha1'
 ext.supportConstraintVersion = '1.0.2'
-ext.firebaseVersion = '11.0.2'
-ext.facebookSdkVersion = '4.24.0'
-ext.googlePlayServiceVersion = '11.0.2'
+ext.firebaseVersion = '11.0.4'
+ext.facebookSdkVersion = '4.25.0'
+ext.googlePlayServiceVersion = '11.0.4'
 ext.retrofitVersion = '2.3.0'
 
 dependencies {
@@ -81,7 +81,6 @@ dependencies {
     compile 'com.github.kenglxn.QRGen:android:2.2.0'
     compile 'com.akexorcist:googledirectionlibrary:1.0.5'
     compile 'com.google.maps.android:android-maps-utils:0.4'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
 

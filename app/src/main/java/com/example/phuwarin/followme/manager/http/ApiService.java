@@ -93,16 +93,6 @@ public interface ApiService {
     );
 
     @FormUrlEncoded
-    @POST("add_origin.php")
-    Call<NormalDao> addOrigin(
-            @Field("origin_id") String id,
-            @Field("origin_name_en") String nameEn,
-            @Field("origin_name_th") String nameTh,
-            @Field("origin_lat") double lat,
-            @Field("origin_lng") double lng
-    );
-
-    @FormUrlEncoded
     @POST("add_bicycle_route.php")
     Call<NormalDao> addBicycleRoute(
             @Field("route_id") String id,
@@ -142,7 +132,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("get_route_detail_from_trip.php")
     Call<RouteDao> loadRouteDetail(
-            @Field("trip_id") String trip_id
+            @Field("trip_id") String tripId
     );
 
     @FormUrlEncoded

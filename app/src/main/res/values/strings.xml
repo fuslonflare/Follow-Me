@@ -5,7 +5,7 @@
     <string name="google_place_key" translatable="false">AIzaSyAmsFgR4TjydhlRTP05t0_Dre3ZA29BIqY</string>
 
     <string name="label_button_leader" translatable="false">Leader Mode</string>
-    <string name="label_button_folTravelFraglower" translatable="false">Follower Mode</string>
+    <string name="label_button_follower" translatable="false">Follower Mode</string>
     <string name="label_button_next">Next</string>
     <string name="label_button_cancel">Cancel</string>
     <string name="label_button_request_route">Request Route</string>

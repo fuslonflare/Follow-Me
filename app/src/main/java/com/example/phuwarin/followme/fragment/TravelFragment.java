@@ -303,15 +303,6 @@ public class TravelFragment extends Fragment
             showSnackbar(throwable.getMessage());
         }
     };
-    private DialogInterface.OnClickListener onOkClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface,
-                            int i) {
-            Call<NormalDao> finishTripCall = HttpManager.getInstance().getService()
-                    .finishTrip(TripDetail.getInstance().getTripId());
-            finishTripCall.enqueue(finishTripCallback);
-        }
-    };
     private Callback<CheckStatusTripDao> checkStatusTripCallback = new Callback<CheckStatusTripDao>() {
         @Override
         public void onResponse(@NonNull Call<CheckStatusTripDao> call,
@@ -344,6 +335,15 @@ public class TravelFragment extends Fragment
         public void onFailure(@NonNull Call<CheckStatusTripDao> call,
                               @NonNull Throwable throwable) {
             showSnackbar(throwable.getMessage());
+        }
+    };
+    private DialogInterface.OnClickListener onOkClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface,
+                            int i) {
+            Call<NormalDao> finishTripCall = HttpManager.getInstance().getService()
+                    .finishTrip(TripDetail.getInstance().getTripId());
+            finishTripCall.enqueue(finishTripCallback);
         }
     };
 

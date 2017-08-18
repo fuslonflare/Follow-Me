@@ -423,7 +423,7 @@ public class PickRouteActivity extends FragmentActivity
         GoogleDirection.withServerKey(API_KEY)
                 .from(origin)
                 .to(destination)
-                .transportMode(TransportMode.WALKING)
+                .transportMode(TransportMode.DRIVING)
                 .alternativeRoute(true)
                 .unit(Unit.METRIC)
                 .execute(this);
