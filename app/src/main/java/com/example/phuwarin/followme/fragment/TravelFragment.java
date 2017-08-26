@@ -79,7 +79,7 @@ public class TravelFragment extends Fragment
         View.OnClickListener {
 
     private static final String TAG = "FriendsLocation";
-    private static final double FARTHEST_TO_NOTIFICATION_WAYPOINTS = 300.00; // in meters
+    private static final double FARTHEST_TO_NOTIFICATION_WAYPOINTS = 3.00; // in meters
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 919;
 
     private GoogleMap mMap;
@@ -525,7 +525,7 @@ public class TravelFragment extends Fragment
         if (meMarker != null) {
             meMarker.remove();
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
         meMarker = mMap.addMarker(new MarkerOptions()
                 .position(currentLocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_my_location)));

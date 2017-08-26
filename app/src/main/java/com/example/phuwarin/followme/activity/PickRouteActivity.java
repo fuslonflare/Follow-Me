@@ -377,7 +377,7 @@ public class PickRouteActivity extends FragmentActivity
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
         origin = currentLocation;
         if (buttonRequestDirection.getVisibility() == View.VISIBLE) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
         }
 
 

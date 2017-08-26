@@ -94,7 +94,7 @@ public class PickDestinationActivity extends FragmentActivity
             sMarker = sMap.addMarker(new MarkerOptions().position(latLng));
             sLocation = latLng;
             sButtonNext.setVisibility(View.VISIBLE);
-            sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+            sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
         }
     };
 
@@ -191,7 +191,7 @@ public class PickDestinationActivity extends FragmentActivity
 
         sMarker = sMap.addMarker(marker);
         sButtonNext.setVisibility(View.VISIBLE);
-        sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sLocation, 16));
+        sMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sLocation, 20));
     }
 
     /**
