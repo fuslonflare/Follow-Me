@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.phuwarin.followme.R;
 import com.example.phuwarin.followme.manager.UserSharedPreferenceHandler;
 import com.example.phuwarin.followme.util.detail.User;
@@ -25,7 +26,6 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by Phuwarin on 4/5/2017.
@@ -178,7 +178,7 @@ public class MemberAreaFragment extends Fragment {
         userId.setText(id);
         Glide.with(getContext())
                 .load(photo)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
+                .apply(new RequestOptions().circleCrop())
                 .into(userPhoto);
 
         User.getInstance().setId(id);

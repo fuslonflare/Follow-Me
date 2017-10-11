@@ -27,4 +27,5 @@
         android:text="Longitude: "
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_latitude" />
+
 </android.support.constraint.ConstraintLayout>

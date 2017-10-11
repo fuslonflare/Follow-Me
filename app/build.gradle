@@ -13,7 +13,7 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '26.0.1'
     defaultConfig {
         applicationId "com.example.phuwarin.followme"
         minSdkVersion 16
@@ -41,10 +41,11 @@ repositories {
 
 ext.supportLibraryVersion = '26.0.0-alpha1'
 ext.supportConstraintVersion = '1.0.2'
-ext.firebaseVersion = '11.0.4'
-ext.facebookSdkVersion = '4.25.0'
-ext.googlePlayServiceVersion = '11.0.4'
+ext.firebaseVersion = '11.4.2'
+ext.facebookSdkVersion = '4.27.0'
+ext.googlePlayServiceVersion = '11.4.2'
 ext.retrofitVersion = '2.3.0'
+ext.glideVersion = '4.2.0'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -64,7 +65,7 @@ dependencies {
 
     compile "com.google.firebase:firebase-crash:$firebaseVersion"
     compile "com.google.firebase:firebase-perf:$firebaseVersion"
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;
     }
 
@@ -76,8 +77,9 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
-    compile 'com.github.bumptech.glide:glide:3.8.0'
-    compile 'jp.wasabeef:glide-transformations:2.0.2'
+    compile "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
     compile 'com.github.kenglxn.QRGen:android:2.2.0'
     compile 'com.akexorcist:googledirectionlibrary:1.0.5'
     compile 'com.google.maps.android:android-maps-utils:0.4'
