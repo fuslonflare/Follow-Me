@@ -12,8 +12,8 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "com.example.phuwarin.followme"
         minSdkVersion 16
@@ -39,7 +39,7 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-ext.supportLibraryVersion = '26.0.0-alpha1'
+ext.supportLibraryVersion = '27.0.0'
 ext.supportConstraintVersion = '1.0.2'
 ext.firebaseVersion = '11.4.2'
 ext.facebookSdkVersion = '4.27.0'
