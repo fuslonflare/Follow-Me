@@ -1,12 +1,15 @@
 package com.example.phuwarin.followme.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -208,6 +211,7 @@ public class PickRouteActivity extends FragmentActivity
             case REQUEST_CODE_LOCATION_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     showToast("Grant OK");
+                    awakeLocationService();
                 } else {
                     showToast("Grant Fail");
                 }
@@ -328,32 +332,7 @@ public class PickRouteActivity extends FragmentActivity
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        int hasLocationPermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_LOCATION_PERMISSION);
-            return;
-        }
-        LocationAvailability availability = LocationServices.FusedLocationApi.
-                getLocationAvailability(mGoogleApiClient);
-        if (availability.isLocationAvailable()) {
-            showToast("Location available");
-            if (buttonRequestDirection.getVisibility() == View.INVISIBLE) {
-                buttonRequestDirection.setVisibility(View.VISIBLE);
-            }
-            LocationRequest request = new LocationRequest()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(3000)
-                    .setFastestInterval(100);
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient,
-                    request,
-                    this);
-        } else {
-            showToast("Location Provider turn off");
-        }
+        awakeLocationService();
     }
 
     @Override
@@ -396,6 +375,45 @@ public class PickRouteActivity extends FragmentActivity
                 }
             }
         }*/
+    }
+
+    private void awakeLocationService() {
+        int hasLocationPermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_LOCATION_PERMISSION);
+            return;
+        }
+
+        LocationAvailability availability = LocationServices.FusedLocationApi.
+                getLocationAvailability(mGoogleApiClient);
+        if (availability.isLocationAvailable()) {
+            showToast("Location available");
+            if (buttonRequestDirection.getVisibility() == View.INVISIBLE) {
+                buttonRequestDirection.setVisibility(View.VISIBLE);
+            }
+            LocationRequest request = new LocationRequest()
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setInterval(3000)
+                    .setFastestInterval(100);
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient,
+                    request,
+                    this);
+        } else {
+            final Context context = this;
+            Snackbar.make(findViewById(R.id.button_request_direction),
+                    "Location services turn off", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Turn On", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .show();
+        }
     }
 
     private boolean isWrongWay(LatLng currentLocation,

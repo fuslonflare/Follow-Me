@@ -498,7 +498,7 @@ public class TravelFragment extends Fragment
                     request,
                     this);
         } else {
-            showToast("Location Provider turn off");
+            // TODO: Handle location provider turn off
         }
     }
 

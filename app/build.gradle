@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.22.2'
+        classpath 'io.fabric.tools:gradle:1.25.1'
     }
 }
 apply plugin: 'com.android.application'
@@ -39,11 +39,11 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-ext.supportLibraryVersion = '27.0.0'
+ext.supportLibraryVersion = '27.1.0'
 ext.supportConstraintVersion = '1.0.2'
-ext.firebaseVersion = '11.4.2'
-ext.facebookSdkVersion = '4.27.0'
-ext.googlePlayServiceVersion = '11.4.2'
+ext.firebaseVersion = '11.8.0'
+ext.facebookSdkVersion = '4.28.0'
+ext.googlePlayServiceVersion = '11.8.0'
 ext.retrofitVersion = '2.3.0'
 ext.glideVersion = '4.2.0'
 
@@ -66,13 +66,10 @@ dependencies {
     compile "com.google.firebase:firebase-crash:$firebaseVersion"
     compile "com.google.firebase:firebase-perf:$firebaseVersion"
     compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
-        transitive = true;
+        transitive = true
     }
 
-    compile("com.facebook.android:facebook-android-sdk:$facebookSdkVersion") {
-        exclude module: 'cardview'
-        exclude module: 'customtabs'
-    }
+    compile"com.facebook.android:facebook-android-sdk:$facebookSdkVersion"
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
@@ -80,7 +77,7 @@ dependencies {
     compile "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
-    compile 'com.github.kenglxn.QRGen:android:2.2.0'
+    compile 'com.github.kenglxn.QRGen:android:2.3.0'
     compile 'com.akexorcist:googledirectionlibrary:1.0.5'
     compile 'com.google.maps.android:android-maps-utils:0.4'
     testCompile 'junit:junit:4.12'
